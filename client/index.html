@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+	<link rel="stylesheet" href="./lib/vuetify.min.css">
+	<link rel="stylesheet" href="./lib/style.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+	<meta charset="UTF-8">
+	<title>Dupe Finder</title>
+
+</head>
+<body>
+
+	<div id="app">
+
+		<!-- NOTES: 1. LOOK AT HOW WE GOT CSV WORKING. NEED BOTH HTML+JS+BACKEND JS, I REMEMBER I HID THE FILE UPLOAD BUTTON AND HAD IT ACTIVATE IN THE JS WHEN AN 'UPLOAD FILE' BUTTON WAS PRESSED. -->
+
+		<header id="hero">
+			<h1 class="display-2 font-weight-bold">Welcome to Yodels Dupe Finder app!</h1>
+			<p class="headline font-weight-thin">When uploading a file, please make sure it is in <strong>.csv</strong> format.</p>
+		</header>
+
+		<main>
+			
+			<v-btn label="nums" @click="postData" id="clicker">Start</v-btn>
+
+		</main>
+
+	</div>
+
+	<script src="./lib/vue.js"></script>
+	<script src="./lib/vuetify.js"></script>
+	<script src="./main.js" type="module"></script>
+
+</body>
+</html>
