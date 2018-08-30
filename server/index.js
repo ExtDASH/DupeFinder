@@ -1,4 +1,5 @@
 const express = require('express')
+const connect = require('connect')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
@@ -6,6 +7,8 @@ const getRouter = require('./routes/ourNums')
 
 const app = express()
 
+// app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
 app.use(morgan('tiny')) //watching for changes
 app.use(express.static(`${__dirname}/../client`))
 app.use('/getnums', getRouter)
