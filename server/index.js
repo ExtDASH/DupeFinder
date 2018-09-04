@@ -7,11 +7,13 @@ const getRouter = require('./routes/ourNums')
 
 const app = express()
 
-// app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 app.use(morgan('tiny')) //watching for changes
 app.use(express.static(`${__dirname}/../client`))
 app.use('/getnums', getRouter)
+app.use('/searchcsv', getRouter)
+app.use('/getnums/csvput', getRouter)
 
 
 

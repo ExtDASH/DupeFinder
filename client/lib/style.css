@@ -10,4 +10,21 @@
 	font-family: 'Roboto', sans-serif;
 	font-size: 1rem;
 	margin-top: 2rem;
+	margin-bottom: 2rem;
+}
+
+#bod{
+	font-family: 'Roboto', sans-serif;
+}
+
+#dupesCard{
+	margin-left: 2rem;
+}
+
+#options{
+	/*margin-left: 5rem;*/
+}
+
+[v-cloak]{
+	display:none;
 }

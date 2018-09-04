@@ -3,7 +3,10 @@
 <head>
 
 	<link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,500,700,900" rel="stylesheet">
-	<link rel="stylesheet" href="./lib/vuetify.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
 	<link rel="stylesheet" href="./lib/style.css">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
@@ -12,25 +15,77 @@
 
 </head>
 <body>
+		<div v-cloak data-app id="app">
+			<v-app>
+				<!-- NOTES: 1. LOOK AT HOW WE GOT CSV WORKING. NEED BOTH HTML+JS+BACKEND JS, I REMEMBER I HID THE FILE UPLOAD BUTTON AND HAD IT ACTIVATE IN THE JS WHEN AN 'UPLOAD FILE' BUTTON WAS PRESSED. -->
 
-	<div id="app">
+				<header id="hero">
+					<h1 class="display-2 font-weight-bold">Welcome to Yodels' Dupe Finder app!</h1>
+					<p class="headline font-weight-thin">Please click the 'Help' button before using the app.</p>
+				</header>
 
-		<!-- NOTES: 1. LOOK AT HOW WE GOT CSV WORKING. NEED BOTH HTML+JS+BACKEND JS, I REMEMBER I HID THE FILE UPLOAD BUTTON AND HAD IT ACTIVATE IN THE JS WHEN AN 'UPLOAD FILE' BUTTON WAS PRESSED. -->
+					<v-layout row justify-center>
+						<v-btn id="btnStrt" @click="dialog = true">Help</v-btn>
+						<v-btn id="btnStrt" @click="viewNums">View Base Numbers</v-btn>
+						<v-dialog v-model="dialog" max-width="400">
+							<v-card>
+								<v-card-title class="headline">Dupe Finder Help</v-card-title>
+								<v-card-text class="subheading font-weight-thin" id="bod">
+									To begin with, the server has 500+ <i>base numbers</i> that are uploaded. Please first select which action you are planning on doing. Selecting the "Find Dupes" radio button will find duplicates.
+									<br>
+									<br>
+									The source that the client is using is in the directory '/DupeFinder/client/readFrom/'. Please name the file you would like to check 'searchThis.csv' (without quotes). Make sure that the file is of CSV type, capitalization is required. This is very important, so please be sure that your file is in the correct format. Once you have named it and have checked its filetype, move it into the directory above.
+									<br>
+									<br>
+									Now you can click the 'Start' button. This will initiate the checking process, and display any duplicate entries that it finds in your CSV file. We are currently working on a CSV export for this.
+									<br>
+									<br>
+									For further instructions, please check this directories 'client' folder for a 'readme.docx'.
+									<br>
+									<br>
+									Thanks for using the app!
+								</v-card-text>
+							</v-card>
+						</v-dialog>
+					</v-layout>
 
-		<header id="hero">
-			<h1 class="display-2 font-weight-bold">Welcome to Yodels Dupe Finder app!</h1>
-			<p class="headline font-weight-thin">When uploading a file, please make sure it is in <strong>.csv</strong> format.</p>
-		</header>
-
-		<main>
-			<v-btn id="btnStrt" label="nums" @click.native="stripData" class="font-weight-thin" id="clicker">Start</v-btn>
-		</main>
-
-	</div>
-	
+					<v-container>
+						<v-layout row justify-center>
+							<v-card max-width="400">
+								<v-card-title class="headline font-weight-bold">Options:</v-card-title>
+								<v-card-text class="subheading font-weight-thin">
+									<v-radio-group v-model="options">
+										<v-radio label="Dupes" value="dupes"></v-radio>
+										<v-radio label="Upload New Base" value="upldNewBase"></v-radio>
+										<v-radio label="Upload Owned Numbers" value="upldOwned"></v-radio>
+									</v-radio-group>
+									<span class="red--text"><p class="subheading font-weight-thin" v-if="options.length">Please ensure you have a 'checkThis.csv' in the 'client/readFrom/' directory before clicking start. Please note, you may need to click the 'Start' button twice for now.</p></span>
+								</v-card-text>
+								<v-divider></v-divider>
+								<v-card-actions>
+									<v-spacer></v-spacer>
+									<v-btn flat @click="initMain" id="strtBtn">Start</v-btn>
+									<v-spacer></v-spacer>
+								</v-card-actions>
+							</v-card>
+							<v-card v-model="tdupes" v-if="tdupes != null" id="dupesCard" max-width="400">
+								<v-card-title class="headline font-weight-bold">Dupes:</v-card-title>
+								<v-card-text class="subheading font-weight-thin">
+									<v-list-tile v-for="item in tdupes" @click="">
+										<v-list-tile-content>
+											{{ item }}
+										</v-list-tile-content>
+									</v-list-tile>
+								</v-card-text>
+							</v-card>
+						</v-layout>
+					</v-container>
+					
+			</v-app>
+		</div>
 
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-	<script src="./lib/vuetify.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
 	<script src="./main.js" type="module"></script>
 	<script src="./helper/api.js" type="module"></script>
 
