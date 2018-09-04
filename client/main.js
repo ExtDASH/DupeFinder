@@ -4,19 +4,50 @@ const app = new Vue({
 	data: {
 		strippedBase: [],
 		baseNums: [],
-		dialog: false,
+		helpDialog: false,
+		loading: false,
+		numsDialog: false,
+		loadedSnack: false,
+		y: 'bottom',
+		timeout: 2000,
 		options: '',
 		tdupes: null,
+		zeroTime: 0,
+		dupesSnack: false,
+		upldNewSnack: false,
+		upldOwnedSnack: false,
 		check: [],
 		thashmap: {},
 		newNums: {},
 	},
 	created: function(){
+		this.loading = true
 		api.getBaseList()
 			.then(obj => {
 				for (var i = 0; i < obj.length; i++)
 					this.baseNums.push(obj[i].field1)
-			})	
+			})
+		setTimeout(() => {(this.loading = false)}, 4000)
+		setTimeout(() => (this.loadedSnack = true), 4400)
+		// setTimeout(() => (this.loadedSnack = true), 400)
+		
+	},
+	watch: {
+		options: function(){
+			if (this.options == 'dupes') {
+				this.dupesSnack = false
+				this.upldNewSnack = false
+				this.upldOwnedSnack = false
+				this.dupesSnack = true
+			} else if (this.options == 'upldNewBase'){
+				this.dupesSnack = false
+				this.upldOwnedSnack = false
+				this.upldNewSnack = false
+				this.upldNewSnack = true
+			} else if (this.options == 'upldOwned'){
+
+			}
+		}
 	},
 	methods: {
 		stripData: function(){
@@ -73,6 +104,7 @@ const app = new Vue({
 		},
 
 		viewNums: function(){
+
 		},
 
 		postStuff: function(){

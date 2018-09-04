@@ -6,11 +6,15 @@
 	padding-bottom: 2rem;
 }
 
-#btnStrt{
+.topBtns{
 	font-family: 'Roboto', sans-serif;
 	font-size: 1rem;
 	margin-top: 2rem;
 	margin-bottom: 2rem;
+}
+
+.dotTxt{
+	font-family: 'Roboto', sans-serif;
 }
 
 #bod{
@@ -19,10 +23,6 @@
 
 #dupesCard{
 	margin-left: 2rem;
-}
-
-#options{
-	/*margin-left: 5rem;*/
 }
 
 [v-cloak]{
