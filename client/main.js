@@ -5,19 +5,21 @@ const app = new Vue({
 		strippedBase: [],
 		baseNums: [],
 		helpDialog: false,
-		loading: false,
+		loadingBase: false,
+		checkingDupes: false,
 		numsDialog: false,
 		loadedSnack: false,
 		y: 'bottom',
 		timeout: 2000,
-		options: '',
+		disabled: true,
+		options: null,
 		tdupes: null,
+		thashmap: {},
 		zeroTime: 0,
 		dupesSnack: false,
 		upldNewSnack: false,
 		upldOwnedSnack: false,
 		check: [],
-		thashmap: {},
 		newNums: {},
 	},
 	created: function(){
@@ -38,31 +40,44 @@ const app = new Vue({
 				this.dupesSnack = false
 				this.upldNewSnack = false
 				this.upldOwnedSnack = false
+				this.disabled = true
 				this.dupesSnack = true
+				this.disabled = false
 			} else if (this.options == 'upldNewBase'){
 				this.dupesSnack = false
 				this.upldOwnedSnack = false
 				this.upldNewSnack = false
+				this.disabled = true
 				this.upldNewSnack = true
+				this.disabled = false
 			} else if (this.options == 'upldOwned'){
 
 			}
-		}
+		},
+		
 	},
 	methods: {
+		getFile: function(){
+			var uploader = document.querySelector('#myFile')
+			uploader.click()
+		},
 		stripData: function(){
 			for (let i = 0; i < this.baseNums.length; i++){
 				this.strippedBase.push(this.baseNums[i].field1)
 			}
 		},
 		initMain: function(){
+			// this.loading = true
 			if (this.options == 'dupes') {
 				api.checkDupesFirst()
 					.then(obj => {
-						for(var i = 0; i < obj.length; i++)
+						for(var i = 0; i < obj.length; i++){
 							this.check.push(obj[i].field1)
+						}
+						this.checker()
+						this.checkerTwo(this.thashmap)
 					})
-					this.checker()
+					
 			} else if (this.options == 'upldNewBase'){
 
 			} else if (this.options == 'upldOwned'){
@@ -79,16 +94,19 @@ const app = new Vue({
 		},
 
 		checker: function(){
+
 			var hashmap = {}
 			this.baseNums.forEach(function(basenum) {
 				hashmap[basenum] = true;
 			})
-			this.checkerTwo(hashmap)
+			this.thashmap = hashmap
 		},
 
 		checkerTwo: function(map){
+			console.log("hi")
+			// var strt = document.querySelector('#start')
+			// strt.click()
 			var dupes = []
-
 			for (var i = 0; i < this.check.length; i++){
 				console.log("hi")
 				if(map[this.check[i]]) {

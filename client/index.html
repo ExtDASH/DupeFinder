@@ -105,7 +105,10 @@
 								<v-divider></v-divider>
 								<v-card-actions>
 									<v-spacer></v-spacer>
-									<v-btn @click="initMain" id="strtBtn">Start</v-btn>
+									<input type="file" style="display: none;" id="myFile">
+									<v-btn @click="getFile" :disabled="disabled">Upload</v-btn>
+									<v-btn @click="initMain" id="start">Start</v-btn>
+									<!-- <v-btn @click="checkerTwo(thashmap)" style="display: none;" id="strtBtn">Start2</v-btn> -->
 									<v-spacer></v-spacer>
 								</v-card-actions>
 							</v-card>
