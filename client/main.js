@@ -4,34 +4,43 @@ const app = new Vue({
 	data: {
 		strippedBase: [],
 		baseNums: [],
+		check: [],
+		newNums: {},
+
 		helpDialog: false,
 		loadingBase: false,
+		switchingDB: false,
 		checkingDupes: false,
 		numsDialog: false,
+		dbDialog: false,
+
+		selectedDB: 'Dereks Numbers',
+
+		zeroTime: 0,
+		dupesSnack: false,
+		switched: false,
+		upldNewSnack: false,
+		upldOwnedSnack: false,
 		loadedSnack: false,
 		y: 'bottom',
 		timeout: 2000,
 		disabled: true,
+
 		options: null,
+
 		tdupes: null,
 		thashmap: {},
-		zeroTime: 0,
-		dupesSnack: false,
-		upldNewSnack: false,
-		upldOwnedSnack: false,
-		check: [],
-		newNums: {},
 	},
 	created: function(){
-		this.loading = true
+		//for now leave these commented out.
+		// this.loadingBase = true
 		api.getBaseList()
 			.then(obj => {
 				for (var i = 0; i < obj.length; i++)
 					this.baseNums.push(obj[i].field1)
 			})
-		setTimeout(() => {(this.loading = false)}, 4000)
-		setTimeout(() => (this.loadedSnack = true), 4400)
-		// setTimeout(() => (this.loadedSnack = true), 400)
+		// setTimeout(() => {(this.loadingBase = false)}, 4000)
+		// setTimeout(() => (this.loadedSnack = true), 4400)
 		
 	},
 	watch: {
@@ -132,6 +141,13 @@ const app = new Vue({
 				this.baseNums["field1"] = this.newNums[i]
 				api.putNewNums(this.baseNums)
 			}
+		},
+
+		switchTo: function(){
+			this.dbDialog = false
+			this.switchingDB = true
+			setTimeout(() => (this.switchingDB = false), 4000)
+			setTimeout(() => (this.switched = true), 4400)
 		},
 	},
 })

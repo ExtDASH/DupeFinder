@@ -17,7 +17,22 @@
 		<div v-cloak data-app id="app">
 			<v-app>
 				<!-- NOTES: 1. LOOK AT HOW WE GOT CSV WORKING. NEED BOTH HTML+JS+BACKEND JS, I REMEMBER I HID THE FILE UPLOAD BUTTON AND HAD IT ACTIVATE IN THE JS WHEN AN 'UPLOAD FILE' BUTTON WAS PRESSED. -->
-
+<!-- 
+	card template:
+<v-card>
+	<v-card-title>
+	</v-card-title>
+	<v-divider></v-divider>
+	<v-card-text>
+	</v-card-text>
+	<v-divider></v-divider>
+	<v-card-actions>
+		<v-spacer></v-spacer>
+		<v-btn></v-btn>
+		<v-spacer></v-spacer>
+	</v-card-actions>
+</v-card>
+ -->
 				<header id="hero">
 					<h1 class="display-2 font-weight-bold">Welcome to Yodels' Dupe Finder app!</h1>
 					<p class="headline font-weight-thin">Please click the 'Help' button before using the app.</p>
@@ -52,13 +67,14 @@
 								</v-card-actions>
 							</v-card>
 						</v-dialog>
+
 						<v-dialog v-model="numsDialog" scrollable max-width="300px">
 							<v-btn class="topBtns" @click="viewNums" slot="activator">View Base Numbers</v-btn>
 							<v-card>
 								<v-card-title>
 									<div>
 										<h3 class="headline mb-0">Base Numbers</h3>
-										<div class="dotTxt subheading font-weight-thin">List of all base numbers uploaded to the database.<br>These numbers are owned by Yodel.</div>
+										<div class="dotTxt subheading font-weight-thin">List of all base numbers uploaded to the database.<br></div>
 									</div>
 								</v-card-title>
 								<v-divider></v-divider>
@@ -80,9 +96,33 @@
 								</v-card-actions>
 							</v-card>
 						</v-dialog>
+
+						<v-dialog v-model="dbDialog" scrollable max-width="400px">
+							<v-btn class="dotTxt topBtns" slot="activator">Switch Database</v-btn>
+							<v-card>
+								<v-card-title>
+									<h3 class="headline dotTxt">Which Database would you like to switch to?</h3>
+								</v-card-title>
+								<v-divider></v-divider>
+								<v-card-text>
+									<v-radio-group class="dotTxt" v-model="options">
+										<v-radio label="Dupes" value="dupes"></v-radio>
+										<v-radio label="Upload New Base" value="upldNewBase"></v-radio>
+										<!-- <v-radio label="Upload Owned Numbers" value="upldOwned"></v-radio> -->
+									</v-radio-group>
+								</v-card-text>
+								<v-divider></v-divider>
+								<v-card-actions>
+									<v-spacer></v-spacer>
+									<v-btn @click="switchTo" class="dotTxt">Okay</v-btn>
+									<v-spacer></v-spacer>
+								</v-card-actions>
+							</v-card>
+						</v-dialog>
+
 					</v-layout>
 
-					<v-dialog v-model="loading" persistent width="300">
+					<v-dialog v-model="loadingBase" persistent width="300">
 						<v-card color="primary" dark>
 							<v-card-text class="dotTxt subheading">
 								Loading numbers...
@@ -91,6 +131,15 @@
 						</v-card>
 					</v-dialog>
 					
+					<v-dialog v-model="switchingDB" persistent width="300">
+						<v-card color="primary" dark>
+							<v-card-text class="dotTxt subheading">
+								Switching to {{ selectedDB }}...
+								<v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+							</v-card-text>
+						</v-card>
+					</v-dialog>
+
 					<v-container>
 						<v-layout row justify-center>
 							<v-card max-width="400">
@@ -139,6 +188,11 @@
 						Please ensure that 'newBase.csv' is<br>
 						present in '/DupeFinder/client/readFrom/'
 						<v-btn dark flat @click="upldNewSnack = false">Okay</v-btn>
+					</v-snackbar>
+
+					<v-snackbar v-model="switched" :timeout="timeout" color="success">
+						Successfully switched to {{ selectedDB }}
+						<v-btn dark flat @click="switched = false">Okay</v-btn>
 					</v-snackbar>
 
 
