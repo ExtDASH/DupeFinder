@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const mainController = require('../controllers/main')
 
+// Clean this up
+
 router.get('/', mainController.getNums)
 router.get('/searchcsv', mainController.searchCSV)
 router.get('/csvput', mainController.csvPut)

@@ -3,14 +3,8 @@ const fs = require('fs-extra')
 const multer = require('multer')
 const bodyParser = require('body-parser')
 const router = express.Router()
-const mainController = require('../controllers/main')
+const filesCont = require('../controllers/filesController.js')
 
-
-const upload = multer()
-
-// Unused for now?
-
-router.post('/', upload.single('Ncsv'), mainController.uploadFiles)
-
+router.get('/', filesCont.viewFiles)
 
 module.exports = router

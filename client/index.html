@@ -154,8 +154,10 @@
 
 					<v-container fluid>
 						<v-layout row justify-center>
+							<!-- <v-container class="padZ"> -->
 							<v-card max-width="400">
-								<v-card-title class="headline font-weight-bold">Options:</v-card-title>
+								<v-card-title class="headline">Options</v-card-title>
+								<v-divider></v-divider>
 								<v-card-text class="subheading">
 									<v-radio-group v-model="options">
 										<v-radio label="Dupes" value="dupes"></v-radio>
@@ -173,6 +175,12 @@
 									<v-spacer></v-spacer>
 								</v-card-actions>
 							</v-card>
+						<!-- </v-container> -->
+							<!-- DUPES CARD -->
+							<!-- DUPES CARD -->
+							<!-- DUPES CARD -->
+							<!-- DUPES CARD -->
+							<!-- DUPES CARD -->
 							<v-card v-model="tdupes" v-if="tdupes != null" id="dupesCard" max-width="400">
 								<v-card-title class="headline font-weight-bold">Dupes:</v-card-title>
 								<v-card-text class="subheading font-weight-thin">
@@ -183,22 +191,32 @@
 									</v-list-tile>
 								</v-card-text>
 							</v-card>
+							<!-- DUPES CARD -->
+							<!-- DUPES CARD -->
+							<!-- DUPES CARD -->
+							<!-- DUPES CARD -->
+							<!-- DUPES CARD -->
 						</v-layout>
 
 						<v-layout class="marginize">
 							<v-spacer></v-spacer>
-								<form method="POST" action="/upload" id="myForm" enctype="multipart/form-data">
-									<input type="file" name="Ncsv" style="display: none;" id="myFile" accept=".csv"/>
-									<v-btn @click="getFile">Select File</v-btn>
-									<v-btn @click="subFile">Upload</v-btn>
-								</form>
+							<form method="POST" action="/upload" id="myForm" enctype="multipart/form-data">
+								<input @change="readFile" type="file" name="Ncsv" style="display: none;" id="myFile" accept=".csv"/>
+								<v-btn @click="getFile">Select File</v-btn>
+								<v-btn id="uploader" @click="">Upload</v-btn>
+							</form>
 							<v-spacer></v-spacer>
 						</v-layout>
-
 					</v-container>
-
-
-					
+										
+					<v-dialog v-model="uploadingFile" :timeout="timeout" persistent width="300">
+						<v-card color="primary" dark>
+							<v-card-text class="dotTxt subheading">
+								Uploading file...
+								<v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+							</v-card-text>
+						</v-card>
+					</v-dialog>
 					<!-- SNACKBARS -->
 					<!-- SNACKBARS -->
 					<!-- SNACKBARS -->
@@ -235,9 +253,12 @@
 						Successfully switched to Yodels Global Batch
 						<v-btn dark flat @click="switchedYodel = false">Okay</v-btn>
 					</v-snackbar>
-
-
-					
+					<!-- SNACKBARS -->
+					<!-- SNACKBARS -->
+					<!-- SNACKBARS -->
+					<!-- SNACKBARS -->
+					<!-- SNACKBARS -->
+					<!-- SNACKBARS -->					
 			</v-app>
 		</div>
 

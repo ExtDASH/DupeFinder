@@ -17,6 +17,14 @@
 	margin-top: 2rem;
 }
 
+.marginL{
+	margin-left: 2rem;
+}
+
+.padZ {
+	padding: 0;
+}
+
 .dotTxt{
 	font-family: 'Roboto', sans-serif;
 }

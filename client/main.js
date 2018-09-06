@@ -9,7 +9,10 @@ const app = new Vue({
 		check: [],
 		newNums: {},
 
-		file: null,
+		file: {},
+		filePath: null,
+		fileName: null,
+		extDASH: '.csv', //file extension.
 
 		database: null,
 		selectedDB: null,
@@ -21,6 +24,7 @@ const app = new Vue({
 		checkingDupes: false,
 		numsDialog: false,
 		dbDialog: false,
+		uploadingFile: false,
 
 		zeroTime: 0,
 		dupesSnack: false,
@@ -39,7 +43,7 @@ const app = new Vue({
 		tdupes: null,
 		thashmap: {},
 
-		fileName: null,
+		
 
 	},
 
@@ -115,6 +119,39 @@ const app = new Vue({
 			var uploader = document.querySelector('#myFile')
 			uploader.click()
 		},
+
+		readFile: function(){
+			const input = document.querySelector('#myFile')
+			const reader = new FileReader()
+			reader.onload = function() {
+				// console.log(reader.result)
+				const csvfile = new Blob([reader.result], { type: 'text/csv' })
+				const uploader = document.querySelector('#uploader')
+				uploader.addEventListener('click', function(){
+					app.uploadingFile = true
+					console.log(csvfile)
+					const form = new FormData()
+					form.append('Ncsv', csvfile, `csv${Date.now()}.csv`)
+					const xhr = new XMLHttpRequest()
+					xhr.open('POST', '/uploads', true)
+					xhr.send(form)
+					setTimeout(() => (app.uploadingFile = false), 2000)
+					
+				})
+				
+				// const form = new FormData()
+				// form.appen('Ncsv', blob, `csv${Date.now()}.csv`)
+			}
+			reader.readAsText(input.files[0])
+			// reader.readAsDataURL(input.files[0])
+			
+		},
+
+		uploadFile: function(){
+			this.uploadingFile = true
+			setTimeout(() => (this.uploadingFile = false), 4000)
+		},
+
 		stripData: function(){
 			for (let i = 0; i < this.baseNums.length; i++){
 				this.strippedBase.push(this.baseNums[i].field1)
@@ -141,14 +178,7 @@ const app = new Vue({
 			}
 		},
 
-		uploadFile: function(){
-			let fileSel = document.querySelector('#myFile').files[0]
-			this.file = fileSel
-			
-			api.fileUpload(this.file)
-
-				
-		},
+		
 
 		fileData: function(e){
 			this.file = e.target.files[0]

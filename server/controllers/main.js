@@ -67,9 +67,9 @@ module.exports = {
 	},
 
 	uploadFiles: (req, res, next) => {
-		
-			res.status(200).send()
-			return
+		console.log(req.file)
+		// res.status(200).send()
+			// return
 	},
 
 	postYodelNums: (req, res, next) => {
