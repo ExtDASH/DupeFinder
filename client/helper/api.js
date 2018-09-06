@@ -5,6 +5,24 @@ let getBaseList = () => {
 		})
 }
 
+let getYodelList = () => {
+	return fetch('/getnums/yodel')
+		.then(res => {
+			return res.json()
+		})
+}
+
+let postYodelList = data => {
+	fetch('/getnums/yodel',{
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(data),
+	})
+	.then(res => {res.send()})
+}
+
 let postBaseNums = data => {
 	fetch('/getnums', {
 		method: 'POST',
@@ -23,6 +41,19 @@ let checkDupesFirst = () => {
 		})
 }
 
+let fileUpload = (file) => {
+	fetch('/upload', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'text/csv'
+		},
+		body: file,
+	})
+	.then(res => {
+		res.send()
+	})
+}
+
 let putTheseNums = () => {
 	return fetch('/getnums/csvput')
 		.then(res => {
@@ -33,7 +64,6 @@ let putTheseNums = () => {
 //then...
 
 let putNewNums = (data) => {
-	
 	fetch('/getnums', {
 		method: 'POST',
 		headers: {
@@ -50,4 +80,7 @@ export default {
 	checkDupesFirst,
 	putTheseNums,
 	putNewNums,
+	getYodelList,
+	postYodelList,
+	fileUpload,
 }
