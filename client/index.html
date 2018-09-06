@@ -201,9 +201,9 @@
 						<v-layout class="marginize">
 							<v-spacer></v-spacer>
 							<form method="POST" action="/upload" id="myForm" enctype="multipart/form-data">
-								<input @change="readFile" type="file" name="Ncsv" style="display: none;" id="myFile" accept=".csv"/>
+								<input type="file" name="Ncsv" style="display: none;" id="myFile" accept=".csv"/>
 								<v-btn @click="getFile">Select File</v-btn>
-								<v-btn id="uploader" @click="">Upload</v-btn>
+								<v-btn id="uploader" @click="readFile">Upload</v-btn>
 							</form>
 							<v-spacer></v-spacer>
 						</v-layout>
@@ -224,12 +224,11 @@
 					<!-- SNACKBARS -->
 					<!-- SNACKBARS -->
 					<v-snackbar v-model="loadedSnack" :timeout="timeout" color="success">
-						Numbers loaded succesfully!
+						Numbers loaded successfully!
 					</v-snackbar>
 
 					<v-snackbar v-model="fileSnack" :timeout="timeout" color="success">
-						You have selected {{ fileName }}.<br>
-						Please click the upload button.
+						Successfully uploaded file!
 					</v-snackbar>
 
 					<v-snackbar v-model="dupesSnack" :timeout="zeroTime" color="warning">

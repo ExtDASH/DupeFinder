@@ -116,35 +116,33 @@ const app = new Vue({
 	},
 	methods: {
 		getFile: function(){
-			var uploader = document.querySelector('#myFile')
-			uploader.click()
+			var fselector = document.querySelector('#myFile')
+			fselector.click()
 		},
-
+//Now need to get a file viewer of sorts on the front end for the user.
 		readFile: function(){
 			const input = document.querySelector('#myFile')
 			const reader = new FileReader()
 			reader.onload = function() {
-				// console.log(reader.result)
-				const csvfile = new Blob([reader.result], { type: 'text/csv' })
-				const uploader = document.querySelector('#uploader')
-				uploader.addEventListener('click', function(){
-					app.uploadingFile = true
-					console.log(csvfile)
-					const form = new FormData()
-					form.append('Ncsv', csvfile, `csv${Date.now()}.csv`)
-					const xhr = new XMLHttpRequest()
-					xhr.open('POST', '/uploads', true)
-					xhr.send(form)
-					setTimeout(() => (app.uploadingFile = false), 2000)
-					
-				})
+				let csvfile = new Blob([reader.result], { type: 'text/csv' })
+				app.uploadingFile = true
+
+				const form = new FormData()
+				let sendName = input.files[0].name.split(/\W+/g)
 				
-				// const form = new FormData()
-				// form.appen('Ncsv', blob, `csv${Date.now()}.csv`)
+				form.append('Ncsv', csvfile, `${sendName[0]}${Date.now()}.csv`)
+				const xhr = new XMLHttpRequest()
+				xhr.open('POST', '/uploads', true)
+				xhr.onreadystatechange = function() {
+				    if(this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+				        form.delete('Ncsv')
+				    }
+				}
+				xhr.send(form)
+				setTimeout(() => (app.uploadingFile = false), 2000)
+				setTimeout(() => (app.fileSnack = true), 2200)
 			}
 			reader.readAsText(input.files[0])
-			// reader.readAsDataURL(input.files[0])
-			
 		},
 
 		uploadFile: function(){

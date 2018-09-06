@@ -13,8 +13,16 @@ const path = require('path')
 
 const app = express()
 
+		var storage = multer.diskStorage({
+		  destination: function (req, file, cb) {
+		    cb(null, './uploads')
+		  },
+		  filename: function (req, file, cb) {
+		    cb(null, file.originalname)
+		  }
+		})
 
-var upload = multer({ dest: 'uploads/' })
+		var upload = multer({ storage: storage })
 
 
 app.use(bodyParser.urlencoded({extended: false}))
@@ -25,9 +33,9 @@ app.use(express.static(`${__dirname}/../client`))
 app.post('/uploads', upload.single('Ncsv'), function (req, res, next) {
 	// let savedName = req.file.filename
 	// let pathTo = req.file.path
-
+	// req.file.filename = req.file.originalname
 	// let resObj = {savedName, pathTo}
-	
+	res.send()
 	// res.status(200).json(resObj)
 	
 })

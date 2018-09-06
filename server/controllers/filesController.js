@@ -9,6 +9,6 @@ module.exports = {
 
 	viewFiles: (req, res, next) => {
 		console.log('konnichiwa!')
-	}	
+	},
 
 }
