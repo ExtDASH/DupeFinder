@@ -3,21 +3,24 @@ const app = new Vue({
 	el: "#app",
 	data: {
 		strippedBase: [],
-		csvPull: {},
+		csvPull: [],
 		baseNums: [],
 		yodelMainNums: [],
 		check: [],
 		newNums: {},
 
+		filesViewer: [],
+		fileLi: [],
 		file: {},
 		filePath: null,
 		fileName: null,
 		extDASH: '.csv', //file extension.
 
-		database: null,
+		database: 'yodels',
 		selectedDB: null,
 
 		helpDialog: false,
+		viewFilesDialog: false,
 		loadingBase: false,
 		switchDis: true,
 		switchingDB: false,
@@ -25,6 +28,7 @@ const app = new Vue({
 		numsDialog: false,
 		dbDialog: false,
 		uploadingFile: false,
+		yodelNumsDialog: false,
 
 		zeroTime: 0,
 		dupesSnack: false,
@@ -51,38 +55,37 @@ const app = new Vue({
 	created: function(){
 		//for now leave these commented out.
 		// this.loadingBase = true
-		api.getBaseList()
+		api.getBaseList()//for some reason this is taking FOREVER maybe I should load one or the other based on selected DB.
 			.then(obj => {
-				for (var i = 0; i < obj.length; i++)
+				for (let i = 0; i < obj.length; i++){
 					this.baseNums.push(obj[i].field1)
+				}
 			})
 
 		api.getYodelList()
-			.then (obj => {
-				let tCsvPull = {}
-				obj.forEach(function(num) {
-					tCsvPull["field1"] = num
-				})
-				console.log(tCsvPull)
-				this.csvPull = tCsvPull
+			.then(obj => {
+				for(var i = 0; i < obj.length; i++){
+					this.yodelMainNums.push(obj[i].field1)
+				}
+			})
 
-				//GET THIS WORKING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				//GET THIS WORKING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				//GET THIS WORKING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				//GET THIS WORKING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				//GET THIS WORKING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				//GET THIS WORKING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				//GET THIS WORKING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				
-		// api.postYodelList(this.csvPull)
-			// .then(obj => {
-			// 	for (var i = 0; i < obj.length; i++)
-			// 		this.yodelMainNums.push(obj[i].field1)
-			// })
+		
+		api.getFileNames()
+			.then(obj => {
+				for (var i = 0; i < obj.length; i++){
+					this.filesViewer.push(obj[i].name)
+				}
+			})
+		
+	
 		// setTimeout(() => {(this.loadingBase = false)}, 4000)
 		// setTimeout(() => (this.loadedSnack = true), 4400)
 		
-		})
+		
+		// api.getFileView()
+		// 	.then (obj => {
+		// 		console.log(obj)
+		// 	})
 	},
 	watch: {
 		options: function(){
@@ -110,6 +113,7 @@ const app = new Vue({
 				this.switchDis = false
 			} else if (this.database == 'yodels'){
 				this.selectedDB = 'Yodels Global Batch'
+
 				this.switchDis = false
 			}
 		}
@@ -130,7 +134,7 @@ const app = new Vue({
 				const form = new FormData()
 				let sendName = input.files[0].name.split(/\W+/g)
 				
-				form.append('Ncsv', csvfile, `${sendName[0]}${Date.now()}.csv`)
+				form.append('Ncsv', csvfile, `${sendName[0]}.csv`)
 				const xhr = new XMLHttpRequest()
 				xhr.open('POST', '/uploads', true)
 				xhr.onreadystatechange = function() {
@@ -155,6 +159,7 @@ const app = new Vue({
 				this.strippedBase.push(this.baseNums[i].field1)
 			}
 		},
+
 		initMain: function(){
 			// this.loading = true
 			if (this.options == 'dupes') {
@@ -176,8 +181,6 @@ const app = new Vue({
 			}
 		},
 
-		
-
 		fileData: function(e){
 			this.file = e.target.files[0]
 		},
@@ -195,7 +198,6 @@ const app = new Vue({
 		},
 
 		checker: function(){
-
 			var hashmap = {}
 			this.baseNums.forEach(function(basenum) {
 				hashmap[basenum] = true;
@@ -210,8 +212,6 @@ const app = new Vue({
 		},
 
 		checkerTwo: function(map){
-			// var strt = document.querySelector('#start')
-			// strt.click()
 			var dupes = []
 			for (var i = 0; i < this.check.length; i++){
 				console.log("hi")

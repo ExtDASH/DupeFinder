@@ -72,17 +72,12 @@
 							<v-btn class="topBtns" @click="viewNums" slot="activator">View Base Numbers</v-btn>
 							<v-card>
 								<v-card-title>
-									<div>
-										<h3 class="headline mb-0">Base Numbers</h3>
-										<div class="dotTxt subheading font-weight-thin">List of all base numbers uploaded to the database.<br></div>
-									</div>
+									<h3 class="headline mb-0">Base Numbers</h3><br>
+									<h3 class="headline dotTxt">Total: {{ baseNums.length }}</h3>
 								</v-card-title>
 								<v-divider></v-divider>
 								<v-card-text style="height: 300px;">
 									<div class="text-xs-center">
-										<h3 class="headline dotTxt">
-											Total: {{ baseNums.length }}
-										</h3>
 										<p class="dotTxt" v-for="item in baseNums">
 											{{ item }}
 										</p>
@@ -96,13 +91,39 @@
 								</v-card-actions>
 							</v-card>
 						</v-dialog>
+
+						<v-dialog v-model="yodelNumsDialog" scrollable max-width="300px">
+							<v-btn class="topBtns" slot="activator">View Yodel Numbers</v-btn>
+							<v-card>
+								<v-card-title class="text-xs-center">
+									<h3 class="headline mb-0">Yodel Numbers</h3>
+									<h3 class="headline dotTxt">Total: {{ yodelMainNums.length }}</h3>
+								</v-card-title>
+								<v-divider></v-divider>
+								<v-card-text style="height: 300px;">
+									<div class="text-xs-center">
+										
+										<p class="dotTxt" v-for="item in yodelMainNums">
+											{{ item }}
+										</p>
+									</div>
+								</v-card-text>
+								<v-divider></v-divider>
+								<v-card-actions>
+									<v-spacer></v-spacer>
+									<v-btn class="dotTxt" @click="yodelNumsDialog = false">Okay</v-btn>
+									<v-spacer></v-spacer>
+								</v-card-actions>
+							</v-card>
+						</v-dialog>
 						<!-- DB SWITCHING -->
 						<!-- DB SWITCHING -->
 						<!-- DB SWITCHING -->
 						<!-- DB SWITCHING -->
 						<!-- DB SWITCHING -->
+						<!-- NEED TO RE-ENABLE BUTTON AT SOME POINT -->
 						<v-dialog v-model="dbDialog" scrollable max-width="400px">
-							<v-btn class="dotTxt topBtns" slot="activator">Select Database</v-btn>
+							<v-btn class="dotTxt topBtns" disabled>Select Database</v-btn>
 							<v-card>
 								<v-card-title>
 									<h3 class="headline dotTxt">Which Database would you like to switch to?</h3>
@@ -161,7 +182,7 @@
 								<v-card-text class="subheading">
 									<v-radio-group v-model="options">
 										<v-radio label="Dupes" value="dupes"></v-radio>
-										<v-radio label="Upload New Base" value="upldNewBase"></v-radio>
+										<v-radio label="Upload New Numbers" value="upldNewBase"></v-radio>
 										<!-- <v-radio label="Upload Owned Numbers" value="upldOwned"></v-radio> -->
 									</v-radio-group>
 								</v-card-text>
@@ -204,11 +225,40 @@
 								<input type="file" name="Ncsv" style="display: none;" id="myFile" accept=".csv"/>
 								<v-btn @click="getFile">Select File</v-btn>
 								<v-btn id="uploader" @click="readFile">Upload</v-btn>
+								<v-btn @click="viewFilesDialog = true">View Files</v-btn>
+
 							</form>
 							<v-spacer></v-spacer>
 						</v-layout>
+
+						
+							
+						
+
 					</v-container>
-										
+						
+					<v-dialog scrollable width="500" v-model="viewFilesDialog">
+						<v-card max-height="400">
+							<v-card-title class="headline">File Viewer</v-card-title>
+							<v-divider></v-divider>
+							<v-card-text>
+								<v-list-tile v-for="item in filesViewer">
+								
+									<v-list-tile-content class="dotTxt text-xs-center">
+										{{ item }}
+									</v-list-tile-content>
+
+								</v-list-tile>
+							</v-card-text>
+							<v-divider></v-divider>
+							<v-card-actions>
+								<v-spacer></v-spacer>
+									<v-btn class="dotTxt" @click="viewFilesDialog = false">Close</v-btn>
+								<v-spacer></v-spacer>
+							</v-card-actions>
+						</v-card>
+					</v-dialog>
+
 					<v-dialog v-model="uploadingFile" :timeout="timeout" persistent width="300">
 						<v-card color="primary" dark>
 							<v-card-text class="dotTxt subheading">
@@ -217,6 +267,8 @@
 							</v-card-text>
 						</v-card>
 					</v-dialog>
+
+
 					<!-- SNACKBARS -->
 					<!-- SNACKBARS -->
 					<!-- SNACKBARS -->

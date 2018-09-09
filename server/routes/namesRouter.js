@@ -3,9 +3,9 @@ const fs = require('fs-extra')
 const multer = require('multer')
 const bodyParser = require('body-parser')
 const router = express.Router()
-const filesCont = require('../controllers/filesController.js')
+const namesCont = require('../controllers/names.js')
 
-router.get('/', filesCont.viewFiles)
-router.post('/', filesCont.fileNamesUnused)
+// router.get('/', namesCont.viewFiles)
+router.get('/', namesCont.fileNames)
 
 module.exports = router

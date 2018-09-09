@@ -14,57 +14,60 @@ module.exports = {
 			})
 			.catch(e => {
 				req.error = e
+				console.log(e)
 				next()
 			})
 	},
 
-	searchCSV: (req, res, next) => {
-		const filePath = `${__dirname}/../../client/readFrom/checkThis.csv`
-		csv({
-			noheader: true
-		})
-		.fromFile(filePath)
-		.then((obj) => {
-			return res.status(200).json(obj)
-		})
-		.catch(e => {
-			req.error = e
-			next()
-		})
+	getYodelNums: (req, res, next) => {
+		yodelSchema.find()
+			.then(obj => {
+				return res.status(200).json(obj)
+			})
+			.catch(e => {
+				req.error = e
+				console.log(e)
+				next()
+			})
 	},
-	csvPut: (req, res, next) => {
-		const filePath = `${__dirname}/../../client/readFrom/putNums.csv`
-		csv({
-			noheader: true
-		})
-		.fromFile(filePath)
-		.then((obj) => {
-			return res.status(200).json(obj)
-		})
-		.catch(e => {
-			req.error = e
-			next()
-		})
-	},
+
+	// searchCSV: (req, res, next) => {
+	// 	const filePath = `${__dirname}/../../client/readFrom/checkThis.csv`
+	// 	csv({
+	// 		noheader: true
+	// 	})
+	// 	.fromFile(filePath)
+	// 	.then((obj) => {
+	// 		return res.status(200).json(obj)
+	// 	})
+	// 	.catch(e => {
+	// 		req.error = e
+	// 		next()
+	// 	})
+	// },
+
+	// csvPut: (req, res, next) => {
+	// 	const filePath = `${__dirname}/../../client/readFrom/putNums.csv`
+	// 	csv({
+	// 		noheader: true
+	// 	})
+	// 	.fromFile(filePath)
+	// 	.then((obj) => {
+	// 		return res.status(200).json(obj)
+	// 	})
+	// 	.catch(e => {
+	// 		req.error = e
+	// 		next()
+	// 	})
+	// },
+//^^^Might be useful later, but for now, they are not.
+
 
 	putEm: (req, res, next) => {
 		console.log(req.body.field1)
 	},
 	//Need to change these methods to now pull from db rather than csv
-	getYodelNums: (req, res, next) => {
-		const filePath = `${__dirname}/../../client/readFrom/yodelNums.csv`
-		csv({
-			noheader: true
-		})
-		.fromFile(filePath)
-		.then((obj) => {
-			return res.status(200).json(obj)
-		})
-		.catch(e => {
-			req.error = e
-			next()
-		})
-	},
+
 
 	uploadFiles: (req, res, next) => {
 		console.log(req.file)
@@ -72,20 +75,36 @@ module.exports = {
 			// return
 	},
 
-	postYodelNums: (req, res, next) => {
-		console.log(req.body.field1)
-	},
+	// postYodelNums: (req, res, next) => {
+	// 	// console.log(req.body)
 
-	postNums: (req, res, next) => {
-		console.log(req.body.field1)
-		numSchem.create({
-			field1: req.body.field1
-		})
-		.then(data => res.status(200).json({ data }))
-		.catch(e => {
-			req.error = e
-			console.log(e)
-			next()
-		})
-	},
+	// 	for (var i = 0; i < req.body.length; i++){
+	// 		let newObj = {}
+	// 		newObj = req.body[i].field1
+	// 		// setTimeout(function() {
+	// 			yodelSchema.create({
+	// 				field1: newObj
+	// 			})
+	// 			.then(data => res.status(200).json({ data }))
+	// 			.catch(e => {
+	// 				req.error = e
+	// 				next()
+	// 			})
+	// 		// }, 200)
+	// 	}
+		
+	// },
+
+	// postNums: (req, res, next) => {
+	// 	console.log(req.body.field1)
+	// 	numSchem.create({
+	// 		field1: req.body.field1
+	// 	})
+	// 	.then(data => res.status(200).json({ data }))
+	// 	.catch(e => {
+	// 		req.error = e
+	// 		console.log(e)
+	// 		next()
+	// 	})
+	// },
 }

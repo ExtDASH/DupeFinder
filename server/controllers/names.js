@@ -1,19 +1,16 @@
 const csv = require('csvtojson')
 const bodyParser = require('body-parser')
 const numSchem = require('../schema.js')
-const yodelSchema = require('../yodelSchema.js')
-const FNS = require('../fileSchema.js')
+const name = require('../fileSchema.js')
 const fs = require('fs-extra')
-const walk = require('klaw')
+const fNS = require('../fileSchema.js')
 const multer = require('multer')
-const mongoose = require('mongoose')
+
 
 module.exports = {
-
-	viewFiles: (req, res, next) => {
-		FNS.find()
+	fileNames: (req, res, next) => {
+		fNS.find()
 			.then(obj => {
-				// console.log(obj)
 				return res.status(200).json(obj)
 			})
 			.catch(e => {
@@ -21,10 +18,5 @@ module.exports = {
 				console.log(e)
 				next()
 			})
-	},
-
-	fileNamesUnused: (req, res, next) =>{
-
-	},
-
+	}
 }

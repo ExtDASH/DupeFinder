@@ -1,5 +1,5 @@
 let getBaseList = () => {
-	return fetch('/getnums')
+	return fetch('/getnums/base')
 		.then(res => {
 			return res.json()
 		})
@@ -7,6 +7,13 @@ let getBaseList = () => {
 
 let getYodelList = () => {
 	return fetch('/getnums/yodel')
+		.then(res => {
+			return res.json()
+		})
+}
+
+let getFileView = () => {
+	return fetch('/uploads')
 		.then(res => {
 			return res.json()
 		})
@@ -20,7 +27,7 @@ let postYodelList = data => {
 		},
 		body: JSON.stringify(data),
 	})
-	.then(res => {res.send()})
+	.then(res => { res.send() })
 }
 
 let postBaseNums = data => {
@@ -57,6 +64,7 @@ let fileUpload = (file) => {
 let putTheseNums = () => {
 	return fetch('/getnums/csvput')
 		.then(res => {
+			console.log(res.json)
 			return res.json()
 		})
 }
@@ -74,8 +82,17 @@ let putNewNums = (data) => {
 	.then(res => res.send())
 }
 
+let getFileNames = () => {
+	return fetch('/fileGet')
+		.then(res => {
+			var obj = res.json()
+			return obj
+		})
+}
+
 export default {
 	getBaseList,
+	getFileNames,
 	postBaseNums,
 	checkDupesFirst,
 	putTheseNums,
@@ -83,4 +100,5 @@ export default {
 	getYodelList,
 	postYodelList,
 	fileUpload,
+	getFileView,
 }
