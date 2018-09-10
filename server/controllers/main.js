@@ -54,6 +54,7 @@ module.exports = {
 		})
 		.fromFile(filePath)
 		.then((obj) => {
+			console.log(obj)
 			return res.status(200).json(obj)
 		})
 		.catch(e => {
@@ -65,7 +66,9 @@ module.exports = {
 
 
 	putEm: (req, res, next) => {
-		console.log(req.body.field1)
+		// yodelSchema.insertMany(req.body, function(err, results){
+			console.log("hello")
+		// })
 	},
 
 

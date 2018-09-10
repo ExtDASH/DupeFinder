@@ -192,7 +192,7 @@
 									<v-spacer></v-spacer>
 									
 									
-									<v-btn @click="initMain(fileSelector)" id="start">Start</v-btn>
+									<v-btn @click="initMain" id="start">Start</v-btn>
 									<!-- <v-btn @click="checkerTwo(thashmap)" style="display: none;" id="strtBtn">Start2</v-btn> -->
 									<v-spacer></v-spacer>
 								</v-card-actions>
@@ -202,9 +202,9 @@
 							<v-spacer></v-spacer>
 							<form method="POST" action="/upload" id="myForm" enctype="multipart/form-data">
 								<input type="file" name="Ncsv" style="display: none;" id="myFile" accept=".csv"/>
-								<v-btn @click="getFile">Select File</v-btn>
+								<v-btn @click="getFile">Browse Your Files</v-btn>
 								<v-btn id="uploader" @click="readFile">Upload</v-btn>
-								<v-btn @click="viewFilesDialog = true">View Files</v-btn>
+								<v-btn @click="viewFilesDialog = true">Select Uploaded File</v-btn>
 							</form>
 							<v-spacer></v-spacer>
 						</v-layout>

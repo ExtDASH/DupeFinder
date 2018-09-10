@@ -168,10 +168,10 @@ const app = new Vue({
 			}
 		},
 
-		initMain: function(file){
+		initMain: function(){
 			if (this.options == 'dupes') {
 				this.loadDialog = true
-				api.checkDupesFirst(file)
+				api.checkDupesFirst(app.fileSelector)
 					.then(obj => {
 						for(var i = 0; i < obj.length; i++){
 							this.check.push(obj[i].field1)
@@ -183,8 +183,8 @@ const app = new Vue({
 				setTimeout(() => (this.dupesDialog = true), 2400)		
 			} else if (this.options == 'addNewBase'){
 				this.addDialog = true
-				console.log(file)
-				api.putTheseNums(file)
+				console.log(this.fileSelector)
+				api.putTheseNums(app.fileSelector)
 					.then(obj => {
 						for (let i = 0; i < obj.length; i++){
 							app.csvPull.push(obj[i].field1)
