@@ -45,19 +45,20 @@
 							<v-card>
 								<v-card-title class="headline">Dupe Finder Help</v-card-title>
 								<v-card-text class="subheading font-weight-thin" id="bod">
-									To begin with, the server has 500+ <i>base numbers</i> that are uploaded. Please first select which action you are planning on doing. Selecting the "Find Dupes" radio button will find duplicates.
+									To begin with, the server has two databases, Yodels past used and current number aswell as just Dereks Toll Free numbers. Please first select which action you are planning on doing. Selecting the "Find Dupes" radio button will find duplicates.
 									<br>
 									<br>
-									The source that the client is using is in the directory '/DupeFinder/client/readFrom/'. Please name the file you would like to check 'searchThis.csv' (without quotes). Make sure that the file is of CSV type, capitalization is required. This is very important, so please be sure that your file is in the correct format. Once you have named it and have checked its filetype, move it into the directory above.
+									Once you have selected the action, please upload the file you want to use. Once the file is done uploading, select it by clicking the "View Files" button. When uploading your file, please make sure your file has a distinct name, and be sure that it is of CSV format.
+									The naming scheme works like this: 'original file name' + 'UTC time stamp' + '.csv'.
 									<br>
 									<br>
-									Now you can click the 'Start' button. This will initiate the checking process, and display any duplicate entries that it finds in your CSV file. We are currently working on a CSV export for this.
+									Once selecting your file, you can now click the 'Start' button. This will initiate the checking process (if you selected the find dupes option), and display any duplicate entries that it finds in your CSV file.
 									<br>
 									<br>
-									For further instructions, please check this directories 'client' folder for a 'readme.docx'.
+									Please ensure that you are using the correct files when adding new numbers to the server. I cannot stress how important this is. If the wrong csv file is used, I will need to clean up the database and reupload numbers. It might be best to check for duplicates FIRST before adding numbers to the database.
 									<br>
 									<br>
-									Thanks for using the app!
+									Thanks for using the app! If you have any questions, please email me at: reid@yodelvoice.com. Please report any bugs to this email aswell.
 								</v-card-text>
 								<v-divider></v-divider>
 								<v-card-actions>
@@ -182,7 +183,7 @@
 								<v-card-text class="subheading">
 									<v-radio-group v-model="options">
 										<v-radio label="Dupes" value="dupes"></v-radio>
-										<v-radio label="Upload New Numbers" value="upldNewBase"></v-radio>
+										<v-radio label="Add New Numbers" value="upldNewBase"></v-radio>
 										<!-- <v-radio label="Upload Owned Numbers" value="upldOwned"></v-radio> -->
 									</v-radio-group>
 								</v-card-text>
@@ -191,34 +192,12 @@
 									<v-spacer></v-spacer>
 									
 									
-									<v-btn @click="initMain" id="start">Start</v-btn>
+									<v-btn @click="initMain(fileSelector)" id="start">Start</v-btn>
 									<!-- <v-btn @click="checkerTwo(thashmap)" style="display: none;" id="strtBtn">Start2</v-btn> -->
 									<v-spacer></v-spacer>
 								</v-card-actions>
 							</v-card>
-						<!-- </v-container> -->
-							<!-- DUPES CARD -->
-							<!-- DUPES CARD -->
-							<!-- DUPES CARD -->
-							<!-- DUPES CARD -->
-							<!-- DUPES CARD -->
-							<v-card v-model="tdupes" v-if="tdupes != null" id="dupesCard" max-width="400">
-								<v-card-title class="headline font-weight-bold">Dupes:</v-card-title>
-								<v-card-text class="subheading font-weight-thin">
-									<v-list-tile v-for="item in tdupes" @click="">
-										<v-list-tile-content>
-											{{ item }}
-										</v-list-tile-content>
-									</v-list-tile>
-								</v-card-text>
-							</v-card>
-							<!-- DUPES CARD -->
-							<!-- DUPES CARD -->
-							<!-- DUPES CARD -->
-							<!-- DUPES CARD -->
-							<!-- DUPES CARD -->
 						</v-layout>
-
 						<v-layout class="marginize">
 							<v-spacer></v-spacer>
 							<form method="POST" action="/upload" id="myForm" enctype="multipart/form-data">
@@ -226,34 +205,64 @@
 								<v-btn @click="getFile">Select File</v-btn>
 								<v-btn id="uploader" @click="readFile">Upload</v-btn>
 								<v-btn @click="viewFilesDialog = true">View Files</v-btn>
-
 							</form>
 							<v-spacer></v-spacer>
 						</v-layout>
-
-						
-							
-						
-
 					</v-container>
-						
-					<v-dialog scrollable width="500" v-model="viewFilesDialog">
-						<v-card max-height="400">
-							<v-card-title class="headline">File Viewer</v-card-title>
+					
+					<!-- DUPES CARD -->
+					<!-- DUPES CARD -->
+					<!-- DUPES CARD -->
+					<!-- DUPES CARD -->
+					<!-- DUPES CARD -->
+					<v-dialog v-model="dupesDialog" scrollable width="450">
+						<v-card v-model="tdupes" v-if="tdupes != null" id="dupesCard">
+							<v-card-title class="headline font-weight-bold">Dupes</v-card-title>
 							<v-divider></v-divider>
-							<v-card-text>
-								<v-list-tile v-for="item in filesViewer">
-								
-									<v-list-tile-content class="dotTxt text-xs-center">
+							<v-card-text class="subheading font-weight-thin">
+								<v-list-tile v-for="item in tdupes" @click="">
+									<v-list-tile-content class="dotTxt">
 										{{ item }}
 									</v-list-tile-content>
-
 								</v-list-tile>
 							</v-card-text>
 							<v-divider></v-divider>
 							<v-card-actions>
 								<v-spacer></v-spacer>
+								<v-btn @click="dupesDialog = false" class="dotTxt">Okay</v-btn>
+								<v-spacer></v-spacer>
+							</v-card-actions>
+						</v-card>
+					</v-dialog>
+
+					<v-dialog v-model="loadDialog" persistent width="300">
+						<v-card color="primary" dark>
+							<v-card-text class="dotTxt subheading">
+								Checking for duplicates...
+								<v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+							</v-card-text>
+						</v-card>
+					</v-dialog>
+					<!-- DUPES CARD -->
+					<!-- DUPES CARD -->
+					<!-- DUPES CARD -->
+					<!-- DUPES CARD -->
+					<!-- DUPES CARD -->
+
+					<v-dialog scrollable width="500" v-model="viewFilesDialog">
+						<v-card max-height="400">
+							<v-card-title class="headline">File Viewer</v-card-title>
+							<v-divider></v-divider>
+							<v-card-text>
+								<v-radio-group v-model="fileSelector">
+									<v-radio class="dotTxt" v-for="item in filesViewer" :key="item" :label="item" :value="item"></v-radio>
+								</v-radio-group>	
+							</v-card-text>
+							<v-divider></v-divider>
+							<v-card-actions>
+								<v-spacer></v-spacer>
 									<v-btn class="dotTxt" @click="viewFilesDialog = false">Close</v-btn>
+									<v-btn class="dotTxt" @click="setFile">Okay</v-btn>
 								<v-spacer></v-spacer>
 							</v-card-actions>
 						</v-card>
@@ -267,6 +276,8 @@
 							</v-card-text>
 						</v-card>
 					</v-dialog>
+
+					
 
 
 					<!-- SNACKBARS -->
@@ -283,15 +294,19 @@
 						Successfully uploaded file!
 					</v-snackbar>
 
+					<v-snackbar v-model="fileSelSnack" :timeout="timeout" color="success">
+						You have selected {{ fileSelector }}
+					</v-snackbar>
+
 					<v-snackbar v-model="dupesSnack" :timeout="zeroTime" color="warning">
-						Please ensure that 'checkThis.csv' is<br>
-						present in '/DupeFinder/client/readFrom'
+						Please select a file by clicking the<br>
+						View Files button.
 						<v-btn dark flat @click="dupesSnack = false">Okay</v-btn>
 					</v-snackbar>
 
 					<v-snackbar v-model="upldNewSnack" :timeout="zeroTime" color="warning">
-						Please ensure that 'newBase.csv' is<br>
-						present in '/DupeFinder/client/readFrom/'
+						Please select a file by clicking the<br>
+						View Files button.
 						<v-btn dark flat @click="upldNewSnack = false">Okay</v-btn>
 					</v-snackbar>
 

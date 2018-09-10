@@ -41,8 +41,8 @@ let postBaseNums = data => {
 	.then(res => res.send())
 }
 
-let checkDupesFirst = () => {
-	return fetch('/getnums/searchcsv')
+let checkDupesFirst = (file) => {
+	return fetch(`/getnums/searchcsv?filename=${file}`)
 		.then(res => {
 			return res.json()
 		})

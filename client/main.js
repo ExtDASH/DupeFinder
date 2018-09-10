@@ -14,6 +14,7 @@ const app = new Vue({
 		file: {},
 		filePath: null,
 		fileName: null,
+		fileSelector: null,
 		extDASH: '.csv', //file extension.
 
 		database: 'yodels',
@@ -29,7 +30,10 @@ const app = new Vue({
 		dbDialog: false,
 		uploadingFile: false,
 		yodelNumsDialog: false,
+		loadDialog: false,
+		dupesDialog: false,
 
+		fileSelSnack: false,
 		zeroTime: 0,
 		dupesSnack: false,
 		switchedDerek: false,
@@ -123,6 +127,11 @@ const app = new Vue({
 			var fselector = document.querySelector('#myFile')
 			fselector.click()
 		},
+
+		setFile: function(){
+			this.viewFilesDialog = false
+			this.fileSelSnack = true
+		},
 //Now need to get a file viewer of sorts on the front end for the user.
 		readFile: function(){
 			const input = document.querySelector('#myFile')
@@ -160,10 +169,11 @@ const app = new Vue({
 			}
 		},
 
-		initMain: function(){
+		initMain: function(file){
 			// this.loading = true
 			if (this.options == 'dupes') {
-				api.checkDupesFirst()
+				this.loadDialog = true
+				api.checkDupesFirst(file)
 					.then(obj => {
 						for(var i = 0; i < obj.length; i++){
 							this.check.push(obj[i].field1)
@@ -171,6 +181,9 @@ const app = new Vue({
 						this.checker()
 						this.checkerTwo(this.thashmap)
 					})
+				setTimeout(() => (this.loadDialog = false), 2000)
+				setTimeout(() => (this.dupesDialog = true), 2400)
+			console.log(file)
 					
 			} else if (this.options == 'upldNewBase'){
 
@@ -214,7 +227,6 @@ const app = new Vue({
 		checkerTwo: function(map){
 			var dupes = []
 			for (var i = 0; i < this.check.length; i++){
-				console.log("hi")
 				if(map[this.check[i]]) {
 					dupes.push(this.check[i]);
 				} else {

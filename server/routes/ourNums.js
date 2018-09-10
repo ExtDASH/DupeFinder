@@ -10,7 +10,7 @@ router.get('/base', mainController.getNums)
 router.get('/yodel', mainController.getYodelNums)
 // router.post('/yodel', mainController.postYodelNums)
 
-// router.get('/searchcsv', mainController.searchCSV)
+router.get('/searchcsv', mainController.searchCSV)
 
 // router.get('/csvput', mainController.csvPut)
 

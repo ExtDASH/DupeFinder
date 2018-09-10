@@ -31,20 +31,21 @@ module.exports = {
 			})
 	},
 
-	// searchCSV: (req, res, next) => {
-	// 	const filePath = `${__dirname}/../../client/readFrom/checkThis.csv`
-	// 	csv({
-	// 		noheader: true
-	// 	})
-	// 	.fromFile(filePath)
-	// 	.then((obj) => {
-	// 		return res.status(200).json(obj)
-	// 	})
-	// 	.catch(e => {
-	// 		req.error = e
-	// 		next()
-	// 	})
-	// },
+	searchCSV: (req, res, next) => {
+		console.log(req.query)
+		const filePath = `${__dirname}/../uploads/${req.query.filename}`
+		csv({
+			noheader: true
+		})
+		.fromFile(filePath)
+		.then((obj) => {
+			return res.status(200).json(obj)
+		})
+		.catch(e => {
+			req.error = e
+			next()
+		})
+	},
 
 	// csvPut: (req, res, next) => {
 	// 	const filePath = `${__dirname}/../../client/readFrom/putNums.csv`
