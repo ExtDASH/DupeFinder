@@ -15,11 +15,11 @@ const app = new Vue({
 		filePath: null,
 		fileName: null,
 		fileSelector: null,
-		extDASH: '.csv', //file extension.
 
 		database: 'yodels',
 		selectedDB: null,
 
+		addDialog: false,
 		helpDialog: false,
 		viewFilesDialog: false,
 		loadingBase: false,
@@ -33,6 +33,7 @@ const app = new Vue({
 		loadDialog: false,
 		dupesDialog: false,
 
+		optSnack: false,
 		fileSelSnack: false,
 		zeroTime: 0,
 		dupesSnack: false,
@@ -117,7 +118,6 @@ const app = new Vue({
 				this.switchDis = false
 			} else if (this.database == 'yodels'){
 				this.selectedDB = 'Yodels Global Batch'
-
 				this.switchDis = false
 			}
 		}
@@ -132,7 +132,6 @@ const app = new Vue({
 			this.viewFilesDialog = false
 			this.fileSelSnack = true
 		},
-//Now need to get a file viewer of sorts on the front end for the user.
 		readFile: function(){
 			const input = document.querySelector('#myFile')
 			const reader = new FileReader()
@@ -170,7 +169,6 @@ const app = new Vue({
 		},
 
 		initMain: function(file){
-			// this.loading = true
 			if (this.options == 'dupes') {
 				this.loadDialog = true
 				api.checkDupesFirst(file)
@@ -182,15 +180,22 @@ const app = new Vue({
 						this.checkerTwo(this.thashmap)
 					})
 				setTimeout(() => (this.loadDialog = false), 2000)
-				setTimeout(() => (this.dupesDialog = true), 2400)
-			console.log(file)
-					
-			} else if (this.options == 'upldNewBase'){
-
+				setTimeout(() => (this.dupesDialog = true), 2400)		
+			} else if (this.options == 'addNewBase'){
+				this.addDialog = true
+				console.log(file)
+				api.putTheseNums(file)
+					.then(obj => {
+						for (let i = 0; i < obj.length; i++){
+							app.csvPull.push(obj[i].field1)
+						}
+						api.putNewNums(app.csvPull)
+					})
+				setTimeout(() => (this.addDialog = false), 2000)
 			} else if (this.options == 'upldOwned'){
 
 			} else if (this.options == null){
-
+				this.optSnack = true
 			}
 		},
 

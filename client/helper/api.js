@@ -61,8 +61,8 @@ let fileUpload = (file) => {
 	})
 }
 
-let putTheseNums = () => {
-	return fetch('/getnums/csvput')
+let putTheseNums = (file) => {
+	return fetch(`/getnums/csvput?filename=${file}`)
 		.then(res => {
 			console.log(res.json)
 			return res.json()
@@ -72,8 +72,8 @@ let putTheseNums = () => {
 //then...
 
 let putNewNums = (data) => {
-	fetch('/getnums', {
-		method: 'POST',
+	fetch('/getnums/putem', {
+		method: 'PUT',
 		headers: {
 			'Content-Type': 'application/json'
 		},

@@ -183,7 +183,7 @@
 								<v-card-text class="subheading">
 									<v-radio-group v-model="options">
 										<v-radio label="Dupes" value="dupes"></v-radio>
-										<v-radio label="Add New Numbers" value="upldNewBase"></v-radio>
+										<v-radio label="Add New Numbers" value="addNewBase"></v-radio>
 										<!-- <v-radio label="Upload Owned Numbers" value="upldOwned"></v-radio> -->
 									</v-radio-group>
 								</v-card-text>
@@ -248,6 +248,14 @@
 					<!-- DUPES CARD -->
 					<!-- DUPES CARD -->
 					<!-- DUPES CARD -->
+					<v-dialog v-model="addDialog" persistent width="300">
+						<v-card color="primary" dark>
+							<v-card-text class="dotTxt subheading">
+								Adding numbers to {{ selectedDB }}...
+								<v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+							</v-card-text>
+						</v-card>
+					</v-dialog>
 
 					<v-dialog scrollable width="500" v-model="viewFilesDialog">
 						<v-card max-height="400">
@@ -288,6 +296,10 @@
 					<!-- SNACKBARS -->
 					<v-snackbar v-model="loadedSnack" :timeout="timeout" color="success">
 						Numbers loaded successfully!
+					</v-snackbar>
+
+					<v-snackbar v-model="optSnack" :timeout="timeout" color="error">
+						Please select an option
 					</v-snackbar>
 
 					<v-snackbar v-model="fileSnack" :timeout="timeout" color="success">

@@ -47,27 +47,26 @@ module.exports = {
 		})
 	},
 
-	// csvPut: (req, res, next) => {
-	// 	const filePath = `${__dirname}/../../client/readFrom/putNums.csv`
-	// 	csv({
-	// 		noheader: true
-	// 	})
-	// 	.fromFile(filePath)
-	// 	.then((obj) => {
-	// 		return res.status(200).json(obj)
-	// 	})
-	// 	.catch(e => {
-	// 		req.error = e
-	// 		next()
-	// 	})
-	// },
-//^^^Might be useful later, but for now, they are not.
+	csvPut: (req, res, next) => {
+		const filePath = `${__dirname}/../uploads/${req.query.filename}`
+		csv({
+			noheader: true
+		})
+		.fromFile(filePath)
+		.then((obj) => {
+			return res.status(200).json(obj)
+		})
+		.catch(e => {
+			req.error = e
+			next()
+		})
+	},
+
 
 
 	putEm: (req, res, next) => {
 		console.log(req.body.field1)
 	},
-	//Need to change these methods to now pull from db rather than csv
 
 
 	uploadFiles: (req, res, next) => {
