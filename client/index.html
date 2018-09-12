@@ -230,6 +230,7 @@
 							<v-card-actions>
 								<v-spacer></v-spacer>
 								<v-btn @click="dupesDialog = false" class="dotTxt">Okay</v-btn>
+								<v-btn @click="fileExport" class="dotTxt">Export</v-btn>
 								<v-spacer></v-spacer>
 							</v-card-actions>
 						</v-card>
@@ -264,7 +265,8 @@
 							<v-card-text>
 								<v-radio-group v-model="fileSelector">
 									<v-radio class="dotTxt" v-for="item in filesViewer" :key="item" :label="item" :value="item"></v-radio>
-								</v-radio-group>	
+								</v-radio-group>
+								<div v-if="!filesViewer.length"><p class="dotTxt text-xs-center subheading">Nothing found. Please upload a file.</p></div>	
 							</v-card-text>
 							<v-divider></v-divider>
 							<v-card-actions>
@@ -276,7 +278,7 @@
 						</v-card>
 					</v-dialog>
 
-					<v-dialog v-model="uploadingFile" :timeout="timeout" persistent width="300">
+					<v-dialog v-model="uploadingFile" persistent width="300">
 						<v-card color="primary" dark>
 							<v-card-text class="dotTxt subheading">
 								Uploading file...

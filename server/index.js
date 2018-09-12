@@ -60,7 +60,9 @@ const postName = (name) => {
 		nFs.create({
 			name: `${name}`
 		})
-		.then(data => res.status(200).send())
+		.then(data => {
+			res.status(200).send()
+		})
 		.catch(e => {
 			req.error = e
 			console.log(e)

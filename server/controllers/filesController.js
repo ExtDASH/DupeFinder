@@ -9,11 +9,9 @@ const multer = require('multer')
 const mongoose = require('mongoose')
 
 module.exports = {
-
 	viewFiles: (req, res, next) => {
 		FNS.find()
 			.then(obj => {
-				// console.log(obj)
 				return res.status(200).json(obj)
 			})
 			.catch(e => {

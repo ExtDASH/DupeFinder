@@ -45,14 +45,24 @@ const app = new Vue({
 		loadedSnack: false,
 		y: 'bottom',
 		timeout: 2000,
+		mTime: 10000,
 		disabled: true,
 
 		options: null,
 
-		tdupes: null,
+		tdupes: [],
 		thashmap: {},
 
-		
+		// split0: [],
+		// split1: [],
+		// split2: [],
+		// split3: [],
+		// split4: [],
+		// split5: [],
+		// split6: [],
+		// split7: [],
+		// split8: [],
+		// split9: [],
 
 	},
 
@@ -81,17 +91,50 @@ const app = new Vue({
 					this.filesViewer.push(obj[i].name)
 				}
 			})
-		
-	
+
+			//file export
+
 		// setTimeout(() => {(this.loadingBase = false)}, 4000)
 		// setTimeout(() => (this.loadedSnack = true), 4400)
-		
-		
-		// api.getFileView()
-		// 	.then (obj => {
-		// 		console.log(obj)
-		// 	})
 	},
+
+	// computed: {
+	// 	splitter: function(){
+	// 		for (let i = 0; i < app.yodelMainNums.length; i++){
+	// 			if (i < 8201){
+	// 				app.split0.push(app.yodelMainNums[i])
+	// 			}
+	// 			if (i > 8201 && i < 16402){
+	// 				app.split1.push(app.yodelMainNums[i])
+	// 			}
+	// 			if (i > 16402 && i < 24603){
+	// 				app.split2.push(app.yodelMainNums[i])
+	// 			}
+	// 			if (i > 24603 && i < 32804){
+	// 				app.split3.push(app.yodelMainNums[i])
+	// 			}
+	// 			if (i > 32804 && i < 41005 ){
+	// 				app.split4.push(app.yodelMainNums[i])
+	// 			}
+	// 			if (i > 41005 && i < 49206){
+	// 				app.split5.push(app.yodelMainNums[i])
+	// 			}
+	// 			if (i > 49206 && i < 57407){
+	// 				app.split6.push(app.yodelMainNums[i])
+	// 			}
+	// 			if (i > 57407 && i < 65608){
+	// 				app.split7.push(app.yodelMainNums[i])
+	// 			}
+	// 			if (i > 65608 && i < 73629){
+	// 				app.split8.push(app.yodelMainNums[i])
+	// 			}
+	// 			if (i > 73629 && i < app.yodelMainNums.length){
+	// 				app.split9.push(app.yodelMainNums[i])
+	// 			}
+	// 		}
+	// 	},
+	// },
+
 	watch: {
 		options: function(){
 			if (this.options == 'dupes') {
@@ -112,6 +155,7 @@ const app = new Vue({
 
 			}
 		},
+
 		database: function(){
 			if (this.database == 'dereks'){
 				this.selectedDB = 'Dereks Toll Free Numbers'
@@ -120,8 +164,13 @@ const app = new Vue({
 				this.selectedDB = 'Yodels Global Batch'
 				this.switchDis = false
 			}
+		},
+
+		yodelMainNums: function() {
+			this.splitter()
 		}
 	},
+
 	methods: {
 		getFile: function(){
 			var fselector = document.querySelector('#myFile')
@@ -151,10 +200,41 @@ const app = new Vue({
 				    }
 				}
 				xhr.send(form)
-				setTimeout(() => (app.uploadingFile = false), 2000)
-				setTimeout(() => (app.fileSnack = true), 2200)
+				
 			}
 			reader.readAsText(input.files[0])
+
+			setTimeout(() => {
+				api.getFileNames()
+				.then(obj => {
+					console.log(obj)
+					for (let i = 0; i < obj.length; i++) {
+						if (app.filesViewer.includes(obj[i].name)){
+						} else {
+							app.filesViewer.push(obj[i].name)
+						}
+					}
+				})
+			}, 4000)
+			setTimeout(() => (app.uploadingFile = false), 10000)
+			setTimeout(() => (app.fileSnack = true), 10200)
+		},
+
+		fileExport: function(){
+
+			// let csvContent = "data:text/csv;charset=utf-8,";
+			// this.tdupes.forEach(function(rowArray){
+			// 	let row = rowArray.join(",");
+			// 	csvContent += row + "\r\n";
+			// }); 
+			// var encodedUri = encodeURI(csvContent);
+			// var link = document.createElement("a");
+			// link.setAttribute("href", encodedUri);
+			// link.setAttribute("download", "my_data.csv");
+			// link.innerHTML= "Click Here to download";
+			// document.body.appendChild(link); // Required for FF
+
+			// link.click();
 		},
 
 		uploadFile: function(){
@@ -176,8 +256,8 @@ const app = new Vue({
 						for(var i = 0; i < obj.length; i++){
 							this.check.push(obj[i].field1)
 						}
-						this.checker()
-						this.checkerTwo(this.thashmap)
+						setTimeout(() => (this.checker()), 1000)
+						setTimeout(() => (this.checkerTwo(this.thashmap)), 1000)
 					})
 				setTimeout(() => (this.loadDialog = false), 2000)
 				setTimeout(() => (this.dupesDialog = true), 2400)		
@@ -187,7 +267,7 @@ const app = new Vue({
 				api.putTheseNums(app.fileSelector)
 					.then(obj => {
 						for (let i = 0; i < obj.length; i++){
-							app.csvPull.push(obj[i].field1)
+							app.csvPull.push(obj[i])
 						}
 						api.putNewNums(app.csvPull)
 					})
@@ -217,31 +297,28 @@ const app = new Vue({
 
 		checker: function(){
 			var hashmap = {}
-			this.baseNums.forEach(function(basenum) {
-				hashmap[basenum] = true;
+			this.check.forEach(function(num) {
+				hashmap[num] = true;
 			})
+			console.log(hashmap)
 			this.thashmap = hashmap
+		},
+
+		checkerTwo: function(map){
+			var dupes = []
+			for (var i = 0; i < this.yodelMainNums.length; i++){
+				if(map[this.yodelMainNums[i]]) {
+					app.tdupes.push(this.check[i]);
+				} else {
+					continue
+				}
+			}
 		},
 
 		closeSwitch: function(){
 			this.dbDialog = false
 			this.database = null
 			this.switchDis = true
-		},
-
-		checkerTwo: function(map){
-			var dupes = []
-			for (var i = 0; i < this.check.length; i++){
-				if(map[this.check[i]]) {
-					dupes.push(this.check[i]);
-				} else {
-					continue
-				}
-			}
-
-			this.tdupes = []
-			this.tdupes = dupes
-			
 		},
 
 		viewNums: function(){

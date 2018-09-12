@@ -14,7 +14,7 @@ router.get('/searchcsv', mainController.searchCSV)
 
 router.get('/csvput', mainController.csvPut)
 
-router.put('/putem', mainController.putEm)
+router.post('/putem', mainController.putEm)
 
 
 

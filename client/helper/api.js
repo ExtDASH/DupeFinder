@@ -49,7 +49,7 @@ let checkDupesFirst = (file) => {
 }
 
 let fileUpload = (file) => {
-	fetch('/upload', {
+	fetch('/uploads', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'text/csv'
@@ -73,11 +73,11 @@ let putTheseNums = (file) => {
 
 let putNewNums = (data) => {
 	fetch('/getnums/putem', {
-		method: 'PUT',
+		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
 		},
-		body: JSON.stringify(data.field1),
+		body: JSON.stringify(data),
 	})
 	.then(res => res.send())
 }
@@ -85,6 +85,7 @@ let putNewNums = (data) => {
 let getFileNames = () => {
 	return fetch('/fileGet')
 		.then(res => {
+
 			var obj = res.json()
 			return obj
 		})

@@ -66,9 +66,17 @@ module.exports = {
 
 
 	putEm: (req, res, next) => {
-		// yodelSchema.insertMany(req.body, function(err, results){
-			console.log("hello")
-		// })
+		// console.log("hi" + req.body)
+		yodelSchema.insertMany(req.body, function(err, results){
+			if (err) {
+				console.log(err)
+			} else {
+				console.log(results)
+				next()
+			}
+
+		})
+
 	},
 
 
