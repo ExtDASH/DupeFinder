@@ -8,6 +8,7 @@ const multer = require('multer')
 const getRouter = require('./routes/ourNums')
 const nFs = require('./fileSchema.js')
 const namesRouter = require('./routes/namesRouter.js')
+const computeRouter = require('./routes/computeRouter.js')
 
 // const uploadRouter = require('./routes/uploadRouter') unused for now
 const filesRouter = require('./routes/filesRouter')
@@ -75,8 +76,7 @@ app.use('/uploads', filesRouter)
 
 app.use('/getnums', getRouter)
 
-// app.use('/searchcsv', getRouter)
-// app.use('/getnums/csvput', getRouter)
+app.use('/compute', computeRouter)
 
 app.use('/filenames', postName)
 

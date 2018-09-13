@@ -53,23 +53,14 @@ const app = new Vue({
 		tdupes: [],
 		thashmap: {},
 
-		// split0: [],
-		// split1: [],
-		// split2: [],
-		// split3: [],
-		// split4: [],
-		// split5: [],
-		// split6: [],
-		// split7: [],
-		// split8: [],
-		// split9: [],
+
 
 	},
 
 	//in the watcher, need to change the way db switching is done. its fine for now, but the snackbar text can be changed 'on the fly'
 	created: function(){
 		//for now leave these commented out.
-		// this.loadingBase = true
+		this.loadingBase = true
 		api.getBaseList()//for some reason this is taking FOREVER maybe I should load one or the other based on selected DB.
 			.then(obj => {
 				for (let i = 0; i < obj.length; i++){
@@ -82,6 +73,7 @@ const app = new Vue({
 				for(var i = 0; i < obj.length; i++){
 					this.yodelMainNums.push(obj[i].field1)
 				}
+				this.loadingBase = false
 			})
 
 		
@@ -92,48 +84,10 @@ const app = new Vue({
 				}
 			})
 
-			//file export
-
+			
 		// setTimeout(() => {(this.loadingBase = false)}, 4000)
 		// setTimeout(() => (this.loadedSnack = true), 4400)
 	},
-
-	// computed: {
-	// 	splitter: function(){
-	// 		for (let i = 0; i < app.yodelMainNums.length; i++){
-	// 			if (i < 8201){
-	// 				app.split0.push(app.yodelMainNums[i])
-	// 			}
-	// 			if (i > 8201 && i < 16402){
-	// 				app.split1.push(app.yodelMainNums[i])
-	// 			}
-	// 			if (i > 16402 && i < 24603){
-	// 				app.split2.push(app.yodelMainNums[i])
-	// 			}
-	// 			if (i > 24603 && i < 32804){
-	// 				app.split3.push(app.yodelMainNums[i])
-	// 			}
-	// 			if (i > 32804 && i < 41005 ){
-	// 				app.split4.push(app.yodelMainNums[i])
-	// 			}
-	// 			if (i > 41005 && i < 49206){
-	// 				app.split5.push(app.yodelMainNums[i])
-	// 			}
-	// 			if (i > 49206 && i < 57407){
-	// 				app.split6.push(app.yodelMainNums[i])
-	// 			}
-	// 			if (i > 57407 && i < 65608){
-	// 				app.split7.push(app.yodelMainNums[i])
-	// 			}
-	// 			if (i > 65608 && i < 73629){
-	// 				app.split8.push(app.yodelMainNums[i])
-	// 			}
-	// 			if (i > 73629 && i < app.yodelMainNums.length){
-	// 				app.split9.push(app.yodelMainNums[i])
-	// 			}
-	// 		}
-	// 	},
-	// },
 
 	watch: {
 		options: function(){
@@ -167,7 +121,7 @@ const app = new Vue({
 		},
 
 		yodelMainNums: function() {
-			this.splitter()
+			// this.splitter()
 		}
 	},
 
@@ -253,14 +207,16 @@ const app = new Vue({
 				this.loadDialog = true
 				api.checkDupesFirst(app.fileSelector)
 					.then(obj => {
+						while(app.dupes.length){
+							app.dupes[i].pop()
+						}
 						for(var i = 0; i < obj.length; i++){
 							this.check.push(obj[i].field1)
 						}
 						setTimeout(() => (this.checker()), 1000)
-						setTimeout(() => (this.checkerTwo(this.thashmap)), 1000)
+						setTimeout(() => (this.checkerTwo()), 5000)
 					})
-				setTimeout(() => (this.loadDialog = false), 2000)
-				setTimeout(() => (this.dupesDialog = true), 2400)		
+						
 			} else if (this.options == 'addNewBase'){
 				this.addDialog = true
 				console.log(this.fileSelector)
@@ -296,23 +252,18 @@ const app = new Vue({
 		},
 
 		checker: function(){
-			var hashmap = {}
-			this.check.forEach(function(num) {
-				hashmap[num] = true;
-			})
-			console.log(hashmap)
-			this.thashmap = hashmap
+			api.hasher(this.yodelMainNums, this.check)
 		},
 
-		checkerTwo: function(map){
-			var dupes = []
-			for (var i = 0; i < this.yodelMainNums.length; i++){
-				if(map[this.yodelMainNums[i]]) {
-					app.tdupes.push(this.check[i]);
-				} else {
-					continue
-				}
-			}
+		checkerTwo: function(){
+			api.nextHasher()
+				.then(arr => {
+					for(var i = 0; i < arr.length; i++){
+						app.tdupes.push(arr[i].toString())
+					}
+					setTimeout(() => (app.loadDialog = false), 2000)
+					setTimeout(() => (app.dupesDialog = true), 2400)
+				})
 		},
 
 		closeSwitch: function(){
