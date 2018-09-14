@@ -97,8 +97,8 @@
 							<v-btn class="topBtns" slot="activator">View Yodel Numbers</v-btn>
 							<v-card>
 								<v-card-title>
-									<h3 class="headline mb-0">Yodel Numbers</h3>
-									<h3 class="headline dotTxt">Total: {{ yodelMainNums.length }}</h3>
+									<p class="headline mb-0">Yodel Numbers</p>
+									<p class="headline dotTxt">Total: {{ yodelMainNums.length }}</p>
 								</v-card-title>
 								<v-divider></v-divider>
 								<v-card-text style="height: 300px;">
@@ -184,7 +184,7 @@
 								<v-card-text class="subheading">
 									<v-radio-group v-model="options">
 										<v-radio label="Dupes" value="dupes"></v-radio>
-										<v-radio label="Add New Numbers" value="addNewBase"></v-radio>
+										<!-- <v-radio label="Add New Numbers" value="addNewBase"></v-radio> -->
 										<!-- <v-radio label="Upload Owned Numbers" value="upldOwned"></v-radio> -->
 									</v-radio-group>
 								</v-card-text>
@@ -220,9 +220,9 @@
 						<v-card v-model="tdupes" v-if="tdupes != null" id="dupesCard" max-height="450">
 							<v-card-title>
 								
-									<h3 class="headline mb-0">Dupes</h3>
-									
-									<div><h3 class="headline dotTxt">Total: {{ tdupes.length }}</h3></div>
+									<p class="headline">Dupes</p>
+									<br>
+									<p class="headline dotTxt">Total: {{ tdupes.length }}</p>
 							
 							</v-card-title>
 							<v-divider></v-divider>

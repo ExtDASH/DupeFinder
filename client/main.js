@@ -56,18 +56,14 @@ const app = new Vue({
 
 
 	},
-
-	//in the watcher, need to change the way db switching is done. its fine for now, but the snackbar text can be changed 'on the fly'
 	created: function(){
-		//for now leave these commented out.
 		this.loadingBase = true
-		api.getBaseList()//for some reason this is taking FOREVER maybe I should load one or the other based on selected DB.
+		api.getBaseList()
 			.then(obj => {
 				for (let i = 0; i < obj.length; i++){
 					this.baseNums.push(obj[i].field1)
 				}
 			})
-
 		api.getYodelList()
 			.then(obj => {
 				for(var i = 0; i < obj.length; i++){
@@ -75,20 +71,13 @@ const app = new Vue({
 				}
 				this.loadingBase = false
 			})
-
-		
 		api.getFileNames()
 			.then(obj => {
 				for (var i = 0; i < obj.length; i++){
 					this.filesViewer.push(obj[i].name)
 				}
 			})
-
-			
-		// setTimeout(() => {(this.loadingBase = false)}, 4000)
-		// setTimeout(() => (this.loadedSnack = true), 4400)
 	},
-
 	watch: {
 		options: function(){
 			if (this.options == 'dupes') {
@@ -111,7 +100,6 @@ const app = new Vue({
 
 			}
 		},
-
 		database: function(){
 			if (this.database == 'dereks'){
 				this.selectedDB = 'Dereks Toll Free Numbers'
@@ -121,14 +109,12 @@ const app = new Vue({
 				this.switchDis = false
 			}
 		},
-
 		fileSelector: function(){
 			if (this.fileSelector != null){
 				this.dupesSnack = false
 			}
 		}
 	},
-
 	methods: {
 		getFile: function(){
 			var fselector = document.querySelector('#myFile')
@@ -161,7 +147,6 @@ const app = new Vue({
 				
 			}
 			reader.readAsText(input.files[0])
-
 			setTimeout(() => {
 				api.getFileNames()
 				.then(obj => {
@@ -177,7 +162,6 @@ const app = new Vue({
 			setTimeout(() => (app.uploadingFile = false), 10000)
 			setTimeout(() => (app.fileSnack = true), 10200)
 		},
-
 		fileExport: function(){
 			let csvContent = "data:text/csv;charset=utf-8,";
 			let rows = []
@@ -188,46 +172,39 @@ const app = new Vue({
 			let output = rows.join(','+'\r\n')
 			console.log(output)
 			csvContent += output
-			var encodedUri = encodeURI(csvContent);
-			var link = document.createElement("a");
+			let encodedUri = encodeURI(csvContent);
+			let link = document.createElement("a");
 			link.setAttribute("href", encodedUri);
 			link.setAttribute("download", "dupes.csv");
 			link.innerHTML= "Click Here to download";
-			document.body.appendChild(link); // Required for FF
+			document.body.appendChild(link);
 
-			link.click(); // This will download the data file named "my_data.csv".
+			link.click();
 		},
-
 		uploadFile: function(){
 			this.uploadingFile = true
 			setTimeout(() => (this.uploadingFile = false), 4000)
 		},
-
 		stripData: function(){
 			for (let i = 0; i < this.baseNums.length; i++){
 				this.strippedBase.push(this.baseNums[i].field1)
 			}
 		},
-
 		initMain: function(){
 			if (this.options == 'dupes') {
 				this.loadDialog = true
+				if (app.tdupes.length != 0){
+					while (app.tdupes.length != 0){
+						app.tdupes.pop()
+					}
+				}
 				api.checkDupesFirst(app.fileSelector)
 					.then(obj => {
-						// while(app.tdupes.length){
-							// app.tdupes[i].pop()
-							//THIS DOES NOT WORK
-							//THIS DOES NOT WORK
-							//THIS DOES NOT WORK
-							//THIS DOES NOT WORK
-							//THIS DOES NOT WORK
-							//THIS DOES NOT WORK
-						// }
 						for(var i = 0; i < obj.length; i++){
 							this.check.push(obj[i].field1)
 						}
-						setTimeout(() => (this.checker()), 1000)
-						setTimeout(() => (this.checkerTwo()), 5000)
+						setTimeout(() => (this.checker()), 5000)
+						setTimeout(() => (this.checkerTwo()), 7000)
 					})
 						
 			} else if (this.options == 'addNewBase'){
@@ -247,28 +224,25 @@ const app = new Vue({
 				this.optSnack = true
 			}
 		},
-
 		fileData: function(e){
 			this.file = e.target.files[0]
 		},
-
 		subFile: function(){
 			api.fileUpload(this.file)
 				
 		},
-
 		putThese: function(){
 			api.putTheseNums()
 				.then(obj => {
 					this.newNums = obj
 				})
 		},
-
 		checker: function(){
+			console.log("hi from checker function")
 			api.hasher(this.yodelMainNums, this.check)
 		},
-
 		checkerTwo: function(){
+		console.log("hi from checkerTwo function")
 			api.nextHasher()
 				.then(arr => {
 					for(var i = 0; i < arr.length; i++){
@@ -278,17 +252,14 @@ const app = new Vue({
 					setTimeout(() => (app.dupesDialog = true), 2400)
 				})
 		},
-
 		closeSwitch: function(){
 			this.dbDialog = false
 			this.database = null
 			this.switchDis = true
 		},
-
 		viewNums: function(){
 
 		},
-
 		postStuff: function(){
 			console.log('hi')
 			for (let i = 0; i < this.newNums.length; i++){
@@ -297,7 +268,6 @@ const app = new Vue({
 				api.putNewNums(this.baseNums)
 			}
 		},
-
 		switchTo: function(){
 			this.dbDialog = false
 			this.switchingDB = true

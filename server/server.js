@@ -38,7 +38,7 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 app.use(bodyParser.json({ limit: '50mb' }))
 app.use(morgan('tiny')) //watching for changes
-app.use(express.static(`${__dirname}/../client`))
+app.use(express.static(`${__dirname}/client`))
 
 app.post('/uploads', upload.single('Ncsv'), function (req, res, next) {
 	var fileName = req.file.filename
