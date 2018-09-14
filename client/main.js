@@ -96,7 +96,9 @@ const app = new Vue({
 				this.upldNewSnack = false
 				this.upldOwnedSnack = false
 				this.disabled = true
-				this.dupesSnack = true
+				if(this.fileSelector == null){
+					this.dupesSnack = true
+				}
 				this.disabled = false
 			} else if (this.options == 'upldNewBase'){
 				this.dupesSnack = false
@@ -120,8 +122,10 @@ const app = new Vue({
 			}
 		},
 
-		yodelMainNums: function() {
-			// this.splitter()
+		fileSelector: function(){
+			if (this.fileSelector != null){
+				this.dupesSnack = false
+			}
 		}
 	},
 
@@ -175,20 +179,23 @@ const app = new Vue({
 		},
 
 		fileExport: function(){
+			let csvContent = "data:text/csv;charset=utf-8,";
+			let rows = []
+			app.tdupes.forEach(function(el){
+				rows.push(el)
+			})
+			console.log(rows)
+			let output = rows.join(','+'\r\n')
+			console.log(output)
+			csvContent += output
+			var encodedUri = encodeURI(csvContent);
+			var link = document.createElement("a");
+			link.setAttribute("href", encodedUri);
+			link.setAttribute("download", "dupes.csv");
+			link.innerHTML= "Click Here to download";
+			document.body.appendChild(link); // Required for FF
 
-			// let csvContent = "data:text/csv;charset=utf-8,";
-			// this.tdupes.forEach(function(rowArray){
-			// 	let row = rowArray.join(",");
-			// 	csvContent += row + "\r\n";
-			// }); 
-			// var encodedUri = encodeURI(csvContent);
-			// var link = document.createElement("a");
-			// link.setAttribute("href", encodedUri);
-			// link.setAttribute("download", "my_data.csv");
-			// link.innerHTML= "Click Here to download";
-			// document.body.appendChild(link); // Required for FF
-
-			// link.click();
+			link.click(); // This will download the data file named "my_data.csv".
 		},
 
 		uploadFile: function(){
@@ -207,9 +214,15 @@ const app = new Vue({
 				this.loadDialog = true
 				api.checkDupesFirst(app.fileSelector)
 					.then(obj => {
-						while(app.dupes.length){
-							app.dupes[i].pop()
-						}
+						// while(app.tdupes.length){
+							// app.tdupes[i].pop()
+							//THIS DOES NOT WORK
+							//THIS DOES NOT WORK
+							//THIS DOES NOT WORK
+							//THIS DOES NOT WORK
+							//THIS DOES NOT WORK
+							//THIS DOES NOT WORK
+						// }
 						for(var i = 0; i < obj.length; i++){
 							this.check.push(obj[i].field1)
 						}
