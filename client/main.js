@@ -107,6 +107,18 @@ const app = new Vue({
 			} else if (this.database == 'yodels'){
 				this.selectedDB = 'Yodels Global Batch'
 				this.switchDis = false
+			} else if (this.database == 'oblg'){
+				this.selectedDB = 'OBLG Database'
+				this.switchDis = false
+			} else if (this.database == 'zips'){
+				this.selectedDB = 'Zipcodes Database'
+				this.switchDis = false
+			} else if (this.database == 'npa'){
+				this.selectedDB = 'NPA Database'
+				this.switchDis = false
+			} else if (this.database == 'landline'){
+				this.selectedDB = 'Landlines Database'
+				this.switchDis = false
 			}
 		},
 		fileSelector: function(){
@@ -126,6 +138,8 @@ const app = new Vue({
 			this.fileSelSnack = true
 		},
 		readFile: function(){
+			const xhr = new XMLHttpRequest()
+
 			const input = document.querySelector('#myFile')
 			const reader = new FileReader()
 			reader.onload = function() {
@@ -136,7 +150,6 @@ const app = new Vue({
 				let sendName = input.files[0].name.split(/\W+/g)
 				
 				form.append('Ncsv', csvfile, `${sendName[0]}.csv`)
-				const xhr = new XMLHttpRequest()
 				xhr.open('POST', '/uploads', true)
 				xhr.onreadystatechange = function() {
 				    if(this.readyState == XMLHttpRequest.DONE && this.status == 200) {
@@ -144,8 +157,45 @@ const app = new Vue({
 				    }
 				}
 				xhr.send(form)
-				
 			}
+				// console.log("hi")
+				// let userFile = input.files[0]
+				// getSignedRequest(userFile)
+				// function getSignedRequest(file){
+
+				// xhr.open('GET', `/sign-s3?file-name=${file.name}&file-type=${file.type}`);
+				// console.log("hi")
+				//   xhr.onreadystatechange = () => {
+				//     if(xhr.readyState === 4){
+				//       if(xhr.status === 200){
+				//         const response = JSON.parse(xhr.responseText);
+				//         uploadFile(file, response.signedRequest, response.url);
+				//       }
+				//       else{
+				//         alert('Could not get signed URL.');
+				//       }
+				//     }
+				//   };
+				//   xhr.send();
+				// }
+				// function uploadFile(file, signedRequest, url){
+				//   const xhr = new XMLHttpRequest();
+				//   xhr.open('POST', signedRequest);
+				//   xhr.onreadystatechange = () => {
+				//     if(xhr.readyState === 4){
+				//       if(xhr.status === 200){
+				//         document.getElementById('preview').src = url;
+				//         document.getElementById('avatar-url').value = url;
+				//       }
+				//       else{
+				//         alert('Could not upload file.');
+				//       }
+				//     }
+				//   };
+				//   xhr.setRequestHeader('Accept', 'text/csv')
+				//   xhr.send(file);
+				// }
+			
 			reader.readAsText(input.files[0])
 			setTimeout(() => {
 				api.getFileNames()
@@ -181,7 +231,7 @@ const app = new Vue({
 
 			link.click();
 		},
-		uploadFile: function(){
+		uploadAFile: function(){
 			this.uploadingFile = true
 			setTimeout(() => (this.uploadingFile = false), 4000)
 		},
@@ -207,22 +257,28 @@ const app = new Vue({
 						setTimeout(() => (this.checkerTwo()), 7000)
 					})
 						
-			} else if (this.options == 'addNewBase'){
+			} else if (this.options == 'addNewData' && this.database == 'landline'){
 				this.addDialog = true
 				console.log(this.fileSelector)
-				api.putTheseNums(app.fileSelector)
-					.then(obj => {
-						for (let i = 0; i < obj.length; i++){
-							app.csvPull.push(obj[i])
-						}
-						api.putNewNums(app.csvPull)
-					})
-				setTimeout(() => (this.addDialog = false), 2000)
-			} else if (this.options == 'upldOwned'){
+				api.addDataLandline(app.fileSelector)
+					// .then(obj => {
+						// for (let i = 0; i < obj.length; i++){
+						// 	app.csvPull.push(obj[i])
+						// }
+						// api.putNewNums(app.csvPull)
+				
+					// })
+				
+			} else if (this.options == 'addNewData' && this.database == 'zips'){
+				this.addDialog = true
+				api.addZips(app.fileSelector)
+					setTimeout(() => (this.addDialog = false), 2000)
+			} 
+			// else if (this.options == 'addNewData'){
 
-			} else if (this.options == null){
-				this.optSnack = true
-			}
+			// } else if (this.options == null){
+			// 	this.optSnack = true
+			// }
 		},
 		fileData: function(e){
 			this.file = e.target.files[0]

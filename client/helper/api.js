@@ -162,9 +162,38 @@ let getFileNames = () => {
 		})
 }
 
+let addDataOBLG = (file) => {
+	fetch('/oblg', {
+		
+	})
+}
+
+let addZips = (file) => {
+	fetch(`/zips?filename=${file}`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	})
+	.then(res => res.send())
+}
+
+let addDataLandline = (file) => {
+	fetch(`/landline?filename=${file}`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	})
+	.then(res => res.send())
+}
+
 export default {
 	getBaseList,
+	addDataLandline,
+	addZips,
 	hasher,
+	addDataOBLG,
 	nextHasher,
 	getFileNames,
 	postBaseNums,

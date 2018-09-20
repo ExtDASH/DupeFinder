@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 	<link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,500,700,900" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
-	<link rel="stylesheet" href="./lib/style.css">
+	<link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">    
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+	<!-- <link rel="stylesheet" type="text/css" href="https://rawgit.com/ExtDASH/herokudeploy/master/client/lib/style.css"> -->
+	<link rel="stylesheet" type="text/css" href="/lib/style.css">
+
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+	<link rel="shortcut icon" href="https://u.jimcdn.com/cms/o/s239e52061df53313/img/favicon.png?t=1445291455">
 	<meta charset="UTF-8">
 	<title>Dupe Finder</title>
 
@@ -125,7 +127,7 @@
 						<!-- DB SWITCHING -->
 						<!-- NEED TO RE-ENABLE BUTTON AT SOME POINT -->
 						<v-dialog v-model="dbDialog" scrollable max-width="400px">
-							<v-btn class="dotTxt topBtns" disabled>Select Database</v-btn>
+							<v-btn class="dotTxt topBtns" slot="activator">Select Database</v-btn>
 							<v-card>
 								<v-card-title>
 									<h3 class="headline dotTxt">Which Database would you like to switch to?</h3>
@@ -135,7 +137,10 @@
 									<v-radio-group class="dotTxt" v-model="database">
 										<v-radio label="Dereks Numbers" value="dereks"></v-radio>
 										<v-radio label="Main Yodel Numbers" value="yodels"></v-radio>
-										<!-- <v-radio label="Upload Owned Numbers" value="upldOwned"></v-radio> -->
+										<v-radio label="OBLG" value="oblg"></v-radio>
+										<v-radio label="Landline" value="landline"></v-radio>
+										<v-radio label="NPA" value="npa"></v-radio>
+										<v-radio label="Zipcodes" value="zips"></v-radio>
 									</v-radio-group>
 								</v-card-text>
 								<v-divider></v-divider>
@@ -178,13 +183,13 @@
 					<v-container fluid>
 						<v-layout row justify-center>
 							<!-- <v-container class="padZ"> -->
-							<v-card max-width="400">
+							<v-card width="300">
 								<v-card-title class="headline">Options</v-card-title>
 								<v-divider></v-divider>
 								<v-card-text class="subheading">
 									<v-radio-group v-model="options">
 										<v-radio label="Dupes" value="dupes"></v-radio>
-										<!-- <v-radio label="Add New Numbers" value="addNewBase"></v-radio> -->
+										<v-radio label="Add New Data" value="addNewData"></v-radio>
 										<!-- <v-radio label="Upload Owned Numbers" value="upldOwned"></v-radio> -->
 									</v-radio-group>
 								</v-card-text>
@@ -353,10 +358,12 @@
 
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
-	<script src="https://unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
-	<script src="./main.js" type="module"></script>
-	<script src="./subprev.js" type="module"></script>
-	<script src="./helper/api.js" type="module"></script>
+
+	<!-- <script src="https://rawgit.com/ExtDASH/herokudeploy/master/client/main.js" type="module"></script> -->
+	<!-- <script src="https://rawgit.com/ExtDASH/herokudeploy/master/client/helper/api.js" type="module"></script> -->
+
+	<script src="/main.js" type="module"></script>
+	<script src="/helper/api.js" type="module"></script>
 
 </body>
 </html>
