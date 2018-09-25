@@ -19,6 +19,13 @@ let getFileView = () => {
 		})
 }
 
+let getZips = () => {
+	return fetch('/zips')
+		.then(res => {
+			return res.json()
+		})
+}
+
 // 		initMain: function(){
 // 			if (this.options == 'dupes') {
 // 				this.loadDialog = true
@@ -188,7 +195,27 @@ let addDataLandline = (file) => {
 	.then(res => res.send())
 }
 
+let checkZips = (listItem) => {
+	return fetch(`/zips/check?listItem=${listItem}`)
+		.then(res => {
+			return res.json()
+		})
+}
+
+let postMatched = (arr) => {
+	fetch('/matched', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(arr)
+	})
+}
+
 export default {
+	postMatched,
+	checkZips,
+	getZips,
 	getBaseList,
 	addDataLandline,
 	addZips,

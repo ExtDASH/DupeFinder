@@ -190,6 +190,7 @@
 									<v-radio-group v-model="options">
 										<v-radio label="Dupes" value="dupes"></v-radio>
 										<v-radio label="Add New Data" value="addNewData"></v-radio>
+										<v-radio label="Check Zips" value="checkZips"></v-radio>
 										<!-- <v-radio label="Upload Owned Numbers" value="upldOwned"></v-radio> -->
 									</v-radio-group>
 								</v-card-text>
@@ -272,6 +273,24 @@
 						</v-card>
 					</v-dialog>
 
+					<v-dialog v-model="zipsDialog1" persistent width="300">
+						<v-card color="primary" dark>
+							<v-card-text class="dotTxt subheading">
+								Getting zips...
+								<v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+							</v-card-text>
+						</v-card>
+					</v-dialog>
+
+					<v-dialog v-model="zipsDialog2" persistent width="300">
+						<v-card color="primary" dark>
+							<v-card-text class="dotTxt subheading">
+								Filtering Landlines...
+								<v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
+							</v-card-text>
+						</v-card>
+					</v-dialog>
+
 					<v-dialog scrollable width="500" v-model="viewFilesDialog">
 						<v-card max-height="400">
 							<v-card-title class="headline">File Viewer</v-card-title>
@@ -287,6 +306,27 @@
 								<v-spacer></v-spacer>
 									<v-btn class="dotTxt" @click="viewFilesDialog = false">Close</v-btn>
 									<v-btn class="dotTxt" @click="setFile">Okay</v-btn>
+								<v-spacer></v-spacer>
+							</v-card-actions>
+						</v-card>
+					</v-dialog>
+
+					<v-dialog scrollable width="500" v-model="matchedZipsDialog">
+						<v-card max-height="400">
+							<v-card-title class="headline">All landlines with matching zipcodes</v-card-title>
+							<v-divider></v-divider>
+							<v-card-text>
+								<div class="text-xs-center">
+									<p class="dotTxt">
+										Total: {{ withMatchingZips.length }}
+									</p>
+								</div>
+							</v-card-text>
+							<v-divider></v-divider>
+							<v-card-actions>
+								<v-spacer></v-spacer>
+									<v-btn class="dotTxt" @click="matchedZipsDialog = false">Close</v-btn>
+									<v-btn class="dotTxt" @click="postMatched">Post</v-btn>
 								<v-spacer></v-spacer>
 							</v-card-actions>
 						</v-card>

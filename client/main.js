@@ -8,6 +8,8 @@ const app = new Vue({
 		yodelMainNums: [],
 		check: [],
 		newNums: {},
+		zips: [],
+		withMatchingZips: [],
 
 		filesViewer: [],
 		fileLi: [],
@@ -32,6 +34,9 @@ const app = new Vue({
 		yodelNumsDialog: false,
 		loadDialog: false,
 		dupesDialog: false,
+		zipsDialog1: false,
+		zipsDialog2: false,
+		matchedZipsDialog: false,
 
 		optSnack: false,
 		fileSelSnack: false,
@@ -76,6 +81,13 @@ const app = new Vue({
 				for (var i = 0; i < obj.length; i++){
 					this.filesViewer.push(obj[i].name)
 				}
+			})
+		api.getZips()
+			.then(obj => {
+				// console.log(obj.data[0].zips)
+				for (var i = 0; i < obj.data[0].zips.length; i++){
+					app.zips.push(obj.data[0].zips[i])
+				}		
 			})
 	},
 	watch: {
@@ -212,6 +224,11 @@ const app = new Vue({
 			setTimeout(() => (app.uploadingFile = false), 10000)
 			setTimeout(() => (app.fileSnack = true), 10200)
 		},
+
+		checkZips: function(){
+
+		},
+
 		fileExport: function(){
 			let csvContent = "data:text/csv;charset=utf-8,";
 			let rows = []
@@ -231,6 +248,11 @@ const app = new Vue({
 
 			link.click();
 		},
+
+		postMatched: function(){
+			api.postMatched(this.withMatchingZips)
+		},
+
 		uploadAFile: function(){
 			this.uploadingFile = true
 			setTimeout(() => (this.uploadingFile = false), 4000)
@@ -273,9 +295,24 @@ const app = new Vue({
 				this.addDialog = true
 				api.addZips(app.fileSelector)
 					setTimeout(() => (this.addDialog = false), 2000)
-			} 
-			// else if (this.options == 'addNewData'){
-
+			} else if (this.options == 'checkZips'){
+				let match = []
+				console.log("zips2 = true")
+				this.zipsDialog2 = true
+				app.zips.forEach(element =>{
+					api.checkZips(element)
+						.then(obj => {
+							obj.data.forEach(el => {
+								app.withMatchingZips.push(el)
+							})
+						})
+				})
+				setTimeout(() => { 
+					this.zipsDialog2 = false 
+					console.log(app.withMatchingZips)
+					this.matchedZipsDialog = true
+				}, 300000)
+			}
 			// } else if (this.options == null){
 			// 	this.optSnack = true
 			// }

@@ -17,6 +17,7 @@ const computeRouter = require('./routes/computeRouter.js')
 const zipRouter = require('./routes/ziprouter.js')
 const filesRouter = require('./routes/filesRouter')
 const llRouter = require('./routes/llrouter.js')
+const matchedRouter = require('./routes/matchedRouter.js')
 
 const S3_BUCKET = process.env.S3_BUCKET;
 
@@ -170,17 +171,13 @@ const postName = (name) => {
 // });
 
 app.use('/uploads', filesRouter)
-
 app.use('/getnums', getRouter)
-
 app.use('/compute', computeRouter)
-
 app.use('/zips', zipRouter)
 app.use('/landline', llRouter)
-
 // app.use('/filenames', postName)
-
 app.use('/fileGet', namesRouter)
+app.use('/matched', matchedRouter)
 
 // app.get('*', (req, res) => {
 // 	res.sendFile(path.join(__dirname, 'client/', 'index.html'))
@@ -193,7 +190,7 @@ app.use('/fileGet', namesRouter)
 // })
 
 
-mongoose.connect('mongodb://allclients:allclients1@ds021172.mlab.com:21172/yodeldidschecker', { useNewUrlParser: true })
+mongoose.connect('mongodb://owner:extdash1@ds111773-a0.mlab.com:11773,ds111773-a1.mlab.com:11773/yodeldidschecker?replicaSet=rs-ds111773', { useNewUrlParser: true })
 	.then(() => {
 		// const PORT = process.env.PORT || 3000;
 		app.listen(3000, () => {

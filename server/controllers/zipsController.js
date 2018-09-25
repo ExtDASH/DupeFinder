@@ -1,6 +1,7 @@
 const csv = require('csvtojson')
 const bodyParser = require('body-parser')
 const zipSchema = require('../zipSchema.js')
+const llSchema = require('../landlineSchema.js')
 const fs = require('fs-extra')
 const multer = require('multer')
 
@@ -33,9 +34,22 @@ module.exports = {
 		
 	},
 
+	checkZips: function(req, res, next){
+		console.log(req.query)
+		llSchema.find({ zipcode: req.query.listItem })
+			.then(data => {
+				return res.status(200).json({ data })
+			})
+			.catch(e => {
+				req.error = e
+				next()
+			})
+	},
+
 	getZips: function(req, res, next){
 		zipSchema.find()
 		.then(data => {
+			console.log(data)
 			return res.status(200).json({ data })
 		})
 		.catch(e => {
