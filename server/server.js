@@ -18,6 +18,7 @@ const zipRouter = require('./routes/ziprouter.js')
 const filesRouter = require('./routes/filesRouter')
 const llRouter = require('./routes/llrouter.js')
 const matchedRouter = require('./routes/matchedRouter.js')
+const scrubRouter = require('./routes/scrub.js')
 
 const S3_BUCKET = process.env.S3_BUCKET;
 
@@ -178,7 +179,7 @@ app.use('/landline', llRouter)
 // app.use('/filenames', postName)
 app.use('/fileGet', namesRouter)
 app.use('/matched', matchedRouter)
-
+app.use('/scrub', scrubRouter)
 // app.get('*', (req, res) => {
 // 	res.sendFile(path.join(__dirname, 'client/', 'index.html'))
 // })
