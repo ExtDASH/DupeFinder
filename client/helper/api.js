@@ -195,6 +195,16 @@ let addDataLandline = (file) => {
 	.then(res => res.send())
 }
 
+let addYodelNumbers = (file) => {
+	fetch(`/getnums/post?filename=${file}`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	})
+	.then(res => res.send())
+}
+
 let checkZips = (listItem) => {
 	return fetch(`/zips/check?listItem=${listItem}`)
 		.then(res => {
@@ -212,7 +222,16 @@ let postMatched = (arr) => {
 	})
 }
 
+let scruber = () => {
+	return fetch('/scrub')
+		.then(res => {
+			return res.json()
+		})
+}
+
 export default {
+	scruber,
+	addYodelNumbers,
 	postMatched,
 	checkZips,
 	getZips,

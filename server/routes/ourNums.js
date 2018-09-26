@@ -5,17 +5,12 @@ const mainController = require('../controllers/main')
 // Clean this up
 
 router.get('/base', mainController.getNums)
-// router.post('/base', mainController.postNums)
-
 router.get('/yodel', mainController.getYodelNums)
-// router.post('/yodel', mainController.postYodelNums)
-
 router.get('/searchcsv', mainController.searchCSV)
-
 router.get('/csvput', mainController.csvPut)
-
-router.post('/putem', mainController.putEm)
-
+router.post('/post', mainController.addNums)
+// router.post('/base', mainController.postNums)
+// router.post('/yodel', mainController.postYodelNums)
 
 
 module.exports = router

@@ -63,22 +63,23 @@ module.exports = {
 		})
 	},
 
-
-
-	putEm: (req, res, next) => {
-		// console.log("hi" + req.body)
-		yodelSchema.insertMany(req.body, function(err, results){
-			if (err) {
-				console.log(err)
-			} else {
-				console.log(results)
-				next()
-			}
-
+	addNums: (req, res, next) => {
+		const filePath = `${__dirname}/../uploads/${req.query.filename}`
+		csv({
+			noheader: true
 		})
-
+		.fromFile(filePath)
+		.then((obj) => {
+			yodelSchema.insertMany(obj, function(err, results){
+				if (err) {
+					console.log(err)
+				} else {
+					console.log(results)
+					next()
+				}
+			})
+		})
 	},
-
 
 	uploadFiles: (req, res, next) => {
 		console.log(req.file)

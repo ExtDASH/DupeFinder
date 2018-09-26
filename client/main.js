@@ -312,6 +312,17 @@ const app = new Vue({
 					console.log(app.withMatchingZips)
 					this.matchedZipsDialog = true
 				}, 300000)
+			} else if (this.options == 'scrub') {
+				api.scruber()
+					.then(obj => {
+						console.log(obj)
+					})
+			} else if (this.options == 'addNewData' && this.database == 'yodels'){
+				this.addDialog = true
+				api.addYodelNumbers(app.fileSelector)
+				.then(() => {
+					this.addDialog = false
+				})
 			}
 			// } else if (this.options == null){
 			// 	this.optSnack = true
